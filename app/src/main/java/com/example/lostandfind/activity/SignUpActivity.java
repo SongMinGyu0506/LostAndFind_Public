@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        //test!!
         cancel = (Button)findViewById(R.id.btn_Cancel);
         register = (Button)findViewById(R.id.btn_Register);
         mName = (EditText)findViewById(R.id.inputText_Name);
