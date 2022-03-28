@@ -45,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         pw_c = (EditText)findViewById(R.id.inputText_PWCorrect);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -77,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 mDialog.dismiss();
 
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
+
                                 String email = user.getEmail();
                                 String uid = user.getUid();
                                 String name = mName.getText().toString().trim();
@@ -91,6 +92,21 @@ public class SignUpActivity extends AppCompatActivity {
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 DocumentReference reference = db.collection("Users").document(uid);
                                 reference.set(hashMap);
+
+                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG,"Sent Email");
+                                            Toast.makeText(SignUpActivity.this, "Verification email sent to " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.e(TAG, "sendEmailVerification", task.getException());
+                                            Toast.makeText(SignUpActivity.this,
+                                                    "Failed to send verification email.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
 
                                 Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
                                 startActivity(intent);

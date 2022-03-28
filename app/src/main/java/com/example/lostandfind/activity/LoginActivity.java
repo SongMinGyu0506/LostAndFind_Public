@@ -16,11 +16,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputID, inputPW;
     private Button logIn, signUp;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,10 @@ public class LoginActivity extends AppCompatActivity {
         inputID = (EditText)findViewById(R.id.inputText_ID);
         inputPW = (EditText)findViewById(R.id.inputText_PW);
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.setLanguageCode("ko");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        firebaseAuth.signOut();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -51,15 +57,36 @@ public class LoginActivity extends AppCompatActivity {
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                     if (task.isSuccessful()) {
-                                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                        startActivity(intent);
-                                        finish(); // 추가해도 될까?
+                                        if (user.isEmailVerified()) {
+                                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(LoginActivity.this,"Not Vertiy Email",Toast.LENGTH_SHORT).show();
+                                        }
+                                         // 추가해도 될까?
                                     } else {
-                                        Toast.makeText(LoginActivity.this,"로그인 실패",Toast.LENGTH_SHORT).show();
-                                        inputID.setText("");
-                                        inputPW.setText("");
-                                        return;
+                                        if (user == null) {
+                                            Toast.makeText(LoginActivity.this,"사용자 계정 없음",Toast.LENGTH_SHORT).show();
+                                            inputID.setText("");
+                                            inputPW.setText("");
+                                            return;
+                                        }
+                                        else if (user != null) {
+                                            //Toast.makeText(LoginActivity.this,"",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginActivity.this,"비밀번호 오류",Toast.LENGTH_SHORT).show();
+                                            inputPW.setText("");
+                                            firebaseAuth.signOut();
+                                            return;
+                                        } else {
+                                            Toast.makeText(LoginActivity.this,"로그인 실패",Toast.LENGTH_SHORT).show();
+                                            inputID.setText("");
+                                            inputPW.setText("");
+                                            return;
+                                        }
+
                                     }
                                 }
                             });
