@@ -1,4 +1,4 @@
-package com.example.lostandfind.activity;
+package com.example.lostandfind.activity.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     private EditText inputID, inputPW;
     private Button logIn, signUp;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
 
@@ -60,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                     if (task.isSuccessful()) {
                                         if (user.isEmailVerified()) {
-                                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                             startActivity(intent);
                                             finish();
                                         } else {
@@ -96,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
             }

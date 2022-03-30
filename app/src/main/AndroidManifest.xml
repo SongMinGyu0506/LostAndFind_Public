@@ -13,9 +13,9 @@
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SignUpActivity"
+            android:name=".activity.login.SignUpActivity"
             android:exported="false" />
-        <activity android:name=".activity.LoginActivity" android:exported="true">
+        <activity android:name=".activity.login.LoginActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

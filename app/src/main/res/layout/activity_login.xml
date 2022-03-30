@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.login.LoginActivity">
 
     <ImageView
         android:id="@+id/image_kumoh"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
 
-        android:text="금오공과대학교 찾아드림"
+        android:text="금오공대 찾아드림"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="25dp"

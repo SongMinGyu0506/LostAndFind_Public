@@ -1,4 +1,4 @@
-package com.example.lostandfind.activity;
+package com.example.lostandfind.activity.login;
 
 import static android.content.ContentValues.TAG;
 
@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.lostandfind.R;
+import com.example.lostandfind.data.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,8 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
     private Button cancel,register;
@@ -45,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         pw_c = (EditText)findViewById(R.id.inputText_PWCorrect);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -53,7 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -78,20 +77,21 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 mDialog.dismiss();
 
-
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
                                 String email = user.getEmail();
                                 String uid = user.getUid();
                                 String name = mName.getText().toString().trim();
 
-                                HashMap<Object,String> hashMap = new HashMap<>();
+//                                HashMap<Object,String> hashMap = new HashMap<>();
 
-                                hashMap.put("uid",uid);
-                                hashMap.put("email",email);
-                                hashMap.put("name",name);
+//                                hashMap.put("uid",uid);
+//                                hashMap.put("email",email);
+//                                hashMap.put("name",name);
 
+                                UserData userData = new UserData(uid,email,name);
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                DocumentReference reference = db.collection("Users").document(uid);
-                                reference.set(hashMap);
+                                DocumentReference reference = db.collection("Users").document(userData.getUID());
+                                reference.set(userData);
 
                                 user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
