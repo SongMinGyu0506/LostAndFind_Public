@@ -1,7 +1,7 @@
 package com.example.lostandfind.data;
 
 public class Post {
-    public String firstName, lastName; // Name
+    public String firstName, lastName; // Name SongMinGyu update!!!!
     public long age;
     public Post(){}
     public Post(String firstName, String lastName, long age) {
