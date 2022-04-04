@@ -3,7 +3,7 @@ package com.example.lostandfind.data;
 import java.time.LocalDateTime;
 
 public class UserData {
-    private String UID;
+    private String UID; //UID
     private String email;
     private String name;
     private String localTime;
