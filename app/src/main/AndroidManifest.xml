@@ -10,15 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LostAndFind">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.Main.MainWriterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.Main.MainActivity"
             android:exported="false" />
         <activity
             android:name=".activity.login.SignUpActivity"
             android:exported="false" />
-        <activity android:name=".activity.login.LoginActivity" android:exported="true">
+        <activity
+            android:name=".activity.login.LoginActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

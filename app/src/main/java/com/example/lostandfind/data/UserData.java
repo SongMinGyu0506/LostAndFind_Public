@@ -3,24 +3,33 @@ package com.example.lostandfind.data;
 import java.time.LocalDateTime;
 
 public class UserData {
-    private String UID; //UID
+    private String uid; //UID
     private String email; //email
     private String name;
     private String localTime;
 
+    public UserData() {}
+
     public UserData(String UID, String email, String name) {
-        this.UID = UID;
+        this.uid = UID;
         this.email = email;
         this.name = name;
         localTime = LocalDateTime.now().toString();
     }
 
+    public UserData(String UID, String email, String name, String localTime) {
+        this.uid = UID;
+        this.email = email;
+        this.name = name;
+        this.localTime = localTime;
+    }
+
     public String getUID() {
-        return UID;
+        return uid;
     }
 
     public void setUID(String UID) {
-        this.UID = UID;
+        this.uid = UID;
     }
 
     public String getEmail() {

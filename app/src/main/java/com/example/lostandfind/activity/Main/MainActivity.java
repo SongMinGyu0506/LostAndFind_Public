@@ -1,4 +1,4 @@
-package com.example.lostandfind.activity;
+package com.example.lostandfind.activity.Main;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.lostandfind.R;
@@ -53,11 +55,29 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(mainAdapter);
 
+        upper = (Button)findViewById(R.id.temp_upperBtn);
+        upper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,MainWriterActivity.class);
+                startActivity(intent);
+            }
+        });
+
         EventChangeListener();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            //postArrayList.add((Post)data.getSerializableExtra("post"));
+            EventChangeListener();
+        }
+    }
+
     private void EventChangeListener() {
-        db.collection("Userss").orderBy("firstName", Query.Direction.ASCENDING)
+        db.collection("Posts").orderBy("title", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -72,19 +92,19 @@ public class MainActivity extends AppCompatActivity {
                                 case ADDED:
                                     postArrayList.add(dc.getDocument().toObject(Post.class));
                                     break;
-                                case REMOVED:
-                                    Post tmp = dc.getDocument().toObject(Post.class);
-                                    for(int i = 0; i <postArrayList.size(); i++) {
-                                        Post pi = postArrayList.get(i);
-                                        int numElements = postArrayList.size();
-                                        if(tmp.getFirstName().equals((pi.getFirstName()))) {
-                                            postArrayList.set(i,postArrayList.get(numElements-1));
-                                            postArrayList.set(numElements-1,pi);
-                                            postArrayList.remove(numElements-1);
-                                            i--;
-                                        }
-                                    }
-                                    break;
+//                                case REMOVED:
+//                                    Post tmp = dc.getDocument().toObject(Post.class);
+//                                    for(int i = 0; i <postArrayList.size(); i++) {
+//                                        Post pi = postArrayList.get(i);
+//                                        int numElements = postArrayList.size();
+//                                        if(tmp.getFirstName().equals((pi.getFirstName()))) {
+//                                            postArrayList.set(i,postArrayList.get(numElements-1));
+//                                            postArrayList.set(numElements-1,pi);
+//                                            postArrayList.remove(numElements-1);
+//                                            i--;
+//                                        }
+//                                    }
+//                                    break;
                             }
                             mainAdapter.notifyDataSetChanged();
                             if(progressDialog.isShowing())

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.Main.MainActivity">
 
     <Button
         android:id="@+id/temp_button"
@@ -28,7 +28,7 @@
         android:id="@+id/temp_upperBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="임시 게시글 등록"
 
         android:layout_marginHorizontal="10dp"
 
