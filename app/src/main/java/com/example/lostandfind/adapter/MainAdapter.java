@@ -1,6 +1,7 @@
 package com.example.lostandfind.adapter;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +35,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         Post post = postArrayList.get(position);
-        holder.firstName.setText(post.getFirstName());
-        holder.lastName.setText(post.getLastName());
-        holder.Age.setText(String.valueOf(post.getAge()));
+        holder.title.setText(post.getTitle());
+        holder.UID.setText(post.getUID());
+        holder.text.setText(post.getText());
     }
 
     @Override
@@ -45,13 +46,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     }
 
     public class MainViewHolder extends RecyclerView.ViewHolder {
-        TextView firstName,lastName,Age;
+        TextView UID,title,text;
 
         public MainViewHolder(@NonNull View itemView) {
             super(itemView);
-            firstName = itemView.findViewById(R.id.tvfirstName);
-            lastName = itemView.findViewById(R.id.tvlastName);
-            Age = itemView.findViewById(R.id.age);
+            UID = itemView.findViewById(R.id.tvUID);
+            title = itemView.findViewById(R.id.tvTitle);
+            text = itemView.findViewById(R.id.tvText);
+
         }
     }
 }
