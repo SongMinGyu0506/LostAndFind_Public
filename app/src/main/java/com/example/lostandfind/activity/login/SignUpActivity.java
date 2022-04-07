@@ -45,9 +45,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+//        TODO: [SignUpActivity] 아래의 ActionBar 내용 확인 후 지우기
+        // !!!!! ActionBar는 values-theme에서 수정하였음 !!!!!
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
