@@ -4,15 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.activity.Main.MainActivity;
+import com.example.lostandfind.activity.Main.MainWriterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -41,12 +45,19 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth.signOut();
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+//        TODO: [LoginActivity] 아래의 ActionBar 내용 확인 후 지우기
+        // !!!!! ActionBar는 values-theme에서 수정하였음 !!!!!
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
 
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                TODO: [LoginActivity] 편리한 테스트를 위한 주석처리
+                // 아래 주석처리한 코드는 로그인 없이 바로 테스트하기 위함. 테스트할 때마다 작성하기 귀찮아서 놔둠
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(intent);
+//                finish();
                 if (inputID.getText().toString().length() == 0 || inputPW.getText().toString().length() == 0) {
                     Toast.makeText(LoginActivity.this,"이메일, 패스워드를 전부 입력해주세요",Toast.LENGTH_SHORT).show();
                     return;
@@ -105,4 +116,20 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    // EditText가 아닌 다른 곳 터치 시 키보드 내리기
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            view.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + view.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + view.getTop() - scrcoords[1];
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
 }

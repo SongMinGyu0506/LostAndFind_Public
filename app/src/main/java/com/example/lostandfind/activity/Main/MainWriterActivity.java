@@ -65,9 +65,11 @@ public class MainWriterActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("분실물 작성");
+//        TODO: [MainWriterActivity] 아래의 ActionBar 내용 확인 후 지우기
+        // !!!!! ActionBar는 values-theme에서 수정하였음 !!!!!
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setTitle("분실물 작성");
         //Toast.makeText(this, user.getEmail().toString(), Toast.LENGTH_SHORT).show();
 
         etDate = (EditText)findViewById(R.id.etDate);
