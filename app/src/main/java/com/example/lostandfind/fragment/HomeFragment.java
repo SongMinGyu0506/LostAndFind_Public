@@ -71,13 +71,12 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         EventChangeListener();
-
-
         return rootView;
     }
 
+    //Fragment에서는 작동하지 않는듯? - SongMinGyu
+    //MainWriterActivity에서 작성한 데이터로 리사이클러 업데이트 요청
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,6 +102,7 @@ public class HomeFragment extends Fragment {
                                 case ADDED:
                                     postArrayList.add(dc.getDocument().toObject(Post.class));
                                     break;
+                                    // 삭제시 업데이트: O(N) 소요 알고리즘 적용
 //                                case REMOVED:
 //                                    Post tmp = dc.getDocument().toObject(Post.class);
 //                                    for(int i = 0; i <postArrayList.size(); i++) {

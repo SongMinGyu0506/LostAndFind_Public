@@ -1,6 +1,7 @@
 package com.example.lostandfind.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lostandfind.activity.Main.MainInspectActivity;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
 
@@ -35,6 +37,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         Post post = postArrayList.get(position);
         holder.title.setText(post.getTitle());
         holder.text.setText(post.getText());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MainInspectActivity.class);
+                intent.putExtra("post",post);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

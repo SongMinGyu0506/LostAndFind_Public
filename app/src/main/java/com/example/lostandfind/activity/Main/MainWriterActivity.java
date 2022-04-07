@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.adapter.MainAdapter;
@@ -63,14 +64,6 @@ public class MainWriterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_writer);
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
-
-
-//        TODO: [MainWriterActivity] 아래의 ActionBar 내용 확인 후 지우기
-        // !!!!! ActionBar는 values-theme에서 수정하였음 !!!!!
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setTitle("분실물 작성");
-        //Toast.makeText(this, user.getEmail().toString(), Toast.LENGTH_SHORT).show();
 
         etDate = (EditText)findViewById(R.id.etDate);
         etDate.setKeyListener(null);
@@ -135,18 +128,5 @@ public class MainWriterActivity extends AppCompatActivity {
 
         EditText et_date = (EditText)findViewById(R.id.etDate);
         et_date.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    //액션바 돌아가기 기능
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
