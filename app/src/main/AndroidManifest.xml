@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LostAndFind">
         <activity
+            android:name=".activity.login.FindPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.Main.MainInspectActivity"
             android:exported="false" />
         <activity

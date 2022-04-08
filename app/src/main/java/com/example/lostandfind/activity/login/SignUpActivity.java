@@ -4,9 +4,11 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,23 +67,23 @@ public class SignUpActivity extends AppCompatActivity {
                 final String mEmail = email.getText().toString().trim();
                 String mPw = pw.getText().toString().trim();
                 String mPw_c = pw_c.getText().toString().trim();
+                if (mEmail.contains("@kumoh.ac.kr")) {
+                    if (mPw.equals(mPw_c)) {
+                        Log.d(TAG,"등록 버튼"+mEmail+" , "+pw);
+                        final ProgressDialog mDialog = new ProgressDialog(SignUpActivity.this);
+                        mDialog.setMessage("가입중입니다...");
+                        mDialog.show();
 
-                if (mPw.equals(mPw_c)) {
-                    Log.d(TAG,"등록 버튼"+mEmail+" , "+pw);
-                    final ProgressDialog mDialog = new ProgressDialog(SignUpActivity.this);
-                    mDialog.setMessage("가입중입니다...");
-                    mDialog.show();
+                        firebaseAuth.createUserWithEmailAndPassword(mEmail,mPw).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    mDialog.dismiss();
 
-                    firebaseAuth.createUserWithEmailAndPassword(mEmail,mPw).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                mDialog.dismiss();
-
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                String email = user.getEmail();
-                                String uid = user.getUid();
-                                String name = mName.getText().toString().trim();
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    String email = user.getEmail();
+                                    String uid = user.getUid();
+                                    String name = mName.getText().toString().trim();
 
 //                                HashMap<Object,String> hashMap = new HashMap<>();
 
@@ -89,40 +91,52 @@ public class SignUpActivity extends AppCompatActivity {
 //                                hashMap.put("email",email);
 //                                hashMap.put("name",name);
 
-                                UserData userData = new UserData(uid,email,name);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                DocumentReference reference = db.collection("Users").document(userData.getUID());
-                                reference.set(userData);
+                                    UserData userData = new UserData(uid,email,name);
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    DocumentReference reference = db.collection("Users").document(userData.getUID());
+                                    reference.set(userData);
 
-                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG,"Sent Email");
-                                            Toast.makeText(SignUpActivity.this, "Verification email sent to " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Log.e(TAG, "sendEmailVerification", task.getException());
-                                            Toast.makeText(SignUpActivity.this,
-                                                    "Failed to send verification email.",
-                                                    Toast.LENGTH_SHORT).show();
+                                    user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG,"Sent Email");
+                                                Toast.makeText(SignUpActivity.this, "Verification email sent to " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Log.e(TAG, "sendEmailVerification", task.getException());
+                                                Toast.makeText(SignUpActivity.this,
+                                                        "Failed to send verification email.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
-                                Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                                Toast.makeText(SignUpActivity.this,"회원가입에 성공하셨습니다.",Toast.LENGTH_SHORT).show();
-                            } else {
-                                mDialog.dismiss();
-                                Toast.makeText(SignUpActivity.this,"이미 존재하는 아이디 입니다.",Toast.LENGTH_SHORT).show();
-                                return;
+                                    Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    Toast.makeText(SignUpActivity.this,"회원가입에 성공하셨습니다.",Toast.LENGTH_SHORT).show();
+                                } else {
+                                    mDialog.dismiss();
+                                    Toast.makeText(SignUpActivity.this,"이미 존재하는 아이디 입니다.",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                             }
+                        });
+                    } else {
+                        Toast.makeText(SignUpActivity.this,"비밀번호가 틀렸습니다. 다시 입력해주세요.",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(SignUpActivity.this);
+                    dlg.setTitle("다른 이메일 사용");
+                    dlg.setMessage("금오공대 웹 메일로 등록해주세요");
+                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            email.setText("");
                         }
                     });
-                } else {
-                    Toast.makeText(SignUpActivity.this,"비밀번호가 틀렸습니다. 다시 입력해주세요.",Toast.LENGTH_SHORT).show();
-                    return;
+                    dlg.show();
                 }
             }
         });

@@ -71,6 +71,14 @@
             android:textStyle="bold"
             android:layout_marginTop="10dp"/>
 
+        <Button
+            android:id="@+id/btn_FindPassword"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 재설정"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
     </LinearLayout>
 
 </RelativeLayout>
