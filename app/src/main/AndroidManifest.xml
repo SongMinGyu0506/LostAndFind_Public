@@ -10,7 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LostAndFind">
         <activity
+            android:name=".activity.my.DeleteAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.my.SetupDisturbActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.my.SetupAlertActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.my.ModifyPwActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.my.ModifyNickActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.login.FindPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.my.NoticeActivity"
             android:exported="false" />
         <activity
             android:name=".activity.Main.MainInspectActivity"
