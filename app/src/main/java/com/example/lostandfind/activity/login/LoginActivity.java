@@ -2,12 +2,9 @@ package com.example.lostandfind.activity.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -28,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputID, inputPW;
-    private Button logIn, signUp, findPassword;
+    private Button logIn, signUp;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -42,8 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         signUp = (Button)findViewById(R.id.btn_SignUp);
         inputID = (EditText)findViewById(R.id.inputText_ID);
         inputPW = (EditText)findViewById(R.id.inputText_PW);
-        findPassword = (Button)findViewById(R.id.btn_FindPassword);
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.setLanguageCode("ko");
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -87,18 +82,9 @@ public class LoginActivity extends AppCompatActivity {
                                          // 추가해도 될까?
                                     } else {
                                         if (user == null) {
-                                            //Toast.makeText(LoginActivity.this,"사용자 계정 없음",Toast.LENGTH_SHORT).show();
-                                            AlertDialog.Builder dlg = new AlertDialog.Builder(LoginActivity.this);
-                                            dlg.setTitle("로그인 에러");
-                                            dlg.setMessage("이메일 및 비밀번호를 확인해주세요");
-                                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    inputID.setText("");
-                                                    inputPW.setText("");
-                                                }
-                                            });
-                                            dlg.show();
+                                            Toast.makeText(LoginActivity.this,"사용자 계정 없음",Toast.LENGTH_SHORT).show();
+                                            inputID.setText("");
+                                            inputPW.setText("");
                                             return;
                                         }
                                         else if (user != null) {
@@ -128,14 +114,6 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-        findPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
     }
 
