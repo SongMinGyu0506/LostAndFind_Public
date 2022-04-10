@@ -1,7 +1,6 @@
 package com.example.lostandfind.activity.login;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.activity.Main.MainActivity;
-import com.example.lostandfind.activity.Main.MainWriterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

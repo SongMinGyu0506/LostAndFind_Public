@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,8 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.lostandfind.R;
-import com.example.lostandfind.activity.Main.MainActivity;
-import com.example.lostandfind.activity.Main.MainWriterActivity;
+import com.example.lostandfind.activity.Main.MainCreateActivity;
 import com.example.lostandfind.adapter.MainAdapter;
 import com.example.lostandfind.data.Post;
 import com.google.firebase.firestore.DocumentChange;
@@ -68,7 +66,7 @@ public class HomeFragment extends Fragment {
         upper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MainWriterActivity.class);
+                Intent intent = new Intent(getContext(), MainCreateActivity.class);
                 startActivity(intent);
             }
         });

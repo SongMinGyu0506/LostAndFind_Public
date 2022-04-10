@@ -34,7 +34,7 @@
             android:name=".activity.Main.MainInspectActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.Main.MainWriterActivity"
+            android:name=".activity.Main.MainCreateActivity"
             android:exported="false" />
         <activity
             android:name=".activity.Main.MainActivity"
