@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputID, inputPW;
-    private Button logIn, signUp;
+    private Button logIn, signUp, findPassword;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -37,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         signUp = (Button)findViewById(R.id.btn_SignUp);
         inputID = (EditText)findViewById(R.id.inputText_ID);
         inputPW = (EditText)findViewById(R.id.inputText_PW);
+        findPassword = (Button)findViewById(R.id.btn_FindPassword);
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.setLanguageCode("ko");
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -110,6 +112,13 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+        findPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,FindPasswordActivity.class);
+                startActivity(intent);
             }
         });
 

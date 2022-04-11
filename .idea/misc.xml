@@ -3,32 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/drawable/my_back.xml" value="0.185" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_delete_account.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_main.xml" value="0.31486880466472306" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_main_writer.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_modify_nick.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_modify_pw.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_notice.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_setup_alert.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_setup_disturb.xml" value="0.2578125" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_sign_up.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/activity_temp.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/fragment_chat.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/fragment_home.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/fragment_home2.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/fragment_my.xml" value="0.33" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/main_recycler_item.xml" value="0.27239583333333334" />
-        <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/menu/menu_bottom.xml" value="0.27239583333333334" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/activity_login.xml" value="0.30483112441214194" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/activity_main.xml" value="0.3605072463768116" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/activity_sign_up.xml" value="0.30483112441214194" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/main_recycler_item.xml" value="0.25793291024478693" />
-        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_login.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_find_password.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_main_create.xml" value="0.25" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_main_inspect.xml" value="0.358695652173913" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_main_writer.xml" value="0.33" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/activity_sign_up.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/fragment_chat.xml" value="0.11322463768115942" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/fragment_home2.xml" value="0.19114583333333332" />
+        <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/fragment_my.xml" value="0.11322463768115942" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFound2/app/src/main/res/layout/main_recycler_item.xml" value="0.358695652173913" />
       </map>
     </option>

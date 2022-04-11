@@ -1,11 +1,13 @@
 package com.example.lostandfind.fragment;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.Main.MainActivity;
 import com.example.lostandfind.activity.Main.MainCreateActivity;
 import com.example.lostandfind.adapter.MainAdapter;
 import com.example.lostandfind.data.Post;
@@ -29,10 +33,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     ViewGroup rootView;
-
+    List<Post> tempL; // 임시
     Button upper,lower;
     RecyclerView recyclerView;
     ArrayList<Post> postArrayList;
@@ -58,9 +63,22 @@ public class HomeFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         postArrayList = new ArrayList<Post>();
+
         mainAdapter = new MainAdapter(getActivity(), postArrayList);
 
         recyclerView.setAdapter(mainAdapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+                if (lastVisibleItemPosition == itemTotalCount) {
+                    Toast.makeText(getActivity(), "페이지 끝", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         upper = rootView.findViewById(R.id.temp_upperBtn);
         upper.setOnClickListener(new View.OnClickListener() {
