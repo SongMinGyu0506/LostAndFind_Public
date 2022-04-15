@@ -41,6 +41,5 @@ public class MainInspectActivity extends AppCompatActivity {
         email.setText(post.getUser_email()); //
 //        name.setText(post.getUser_name());
 //        textView11.setText(post.getUser_UID());
-
     }
 }

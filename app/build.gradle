@@ -31,6 +31,9 @@ android {
 }
 
 dependencies {
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.5.0')
+    implementation 'com.google.firebase:firebase-storage'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
