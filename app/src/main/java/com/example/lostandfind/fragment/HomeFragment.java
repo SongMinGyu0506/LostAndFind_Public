@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,7 +26,11 @@ import com.example.lostandfind.activity.Main.MainActivity;
 import com.example.lostandfind.activity.Main.MainCreateActivity;
 import com.example.lostandfind.adapter.MainAdapter;
 import com.example.lostandfind.data.Post;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -45,41 +50,92 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
     ProgressDialog progressDialog;
 
+    private int limit = 7;
+    private DocumentSnapshot lastVisible;
+    private boolean isScrolling = false;
+    private boolean isLastItemReached = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
-
+        db = FirebaseFirestore.getInstance();
 
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("데이터 가져오는중...");
-        progressDialog.show();
+
+        CollectionReference collectionReference = db.collection("Posts");
+        Query query = collectionReference.orderBy("title",Query.Direction.ASCENDING).limit(limit);
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        db = FirebaseFirestore.getInstance();
         postArrayList = new ArrayList<Post>();
-
         mainAdapter = new MainAdapter(getActivity(), postArrayList);
-
         recyclerView.setAdapter(mainAdapter);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-                if (lastVisibleItemPosition == itemTotalCount) {
-                    Toast.makeText(getActivity(), "페이지 끝", Toast.LENGTH_SHORT).show();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Post post = document.toObject(Post.class);
+                        postArrayList.add(post);
+                    }
+                    mainAdapter.notifyDataSetChanged();
+                    lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+
+                    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                                isScrolling = true;
+                            }
+                        }
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+
+
+
+                            LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                            int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                            int visibleItemCount = linearLayoutManager.getChildCount();
+                            int totalItemCount = linearLayoutManager.getItemCount();
+
+                            if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+                                isScrolling = false;
+
+
+
+                                Query nextQuery = collectionReference.orderBy("title",Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit);
+                                nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (DocumentSnapshot d : task.getResult()) {
+                                                Post post = d.toObject(Post.class);
+                                                postArrayList.add(post);
+                                            }
+                                            mainAdapter.notifyDataSetChanged();
+                                            lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+
+                                            if (task.getResult().size() < limit) {
+                                                isLastItemReached = true;
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    };
+                    recyclerView.addOnScrollListener(onScrollListener);
                 }
             }
         });
-
         upper = rootView.findViewById(R.id.temp_upperBtn);
         upper.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,57 +144,6 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        EventChangeListener();
         return rootView;
-    }
-
-    //Fragment에서는 작동하지 않는듯? - SongMinGyu
-    //MainWriterActivity에서 작성한 데이터로 리사이클러 업데이트 요청
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            //postArrayList.add((Post)data.getSerializableExtra("post"));
-            EventChangeListener();
-        }
-    }
-
-    private void EventChangeListener() {
-        db.collection("Posts").orderBy("title", Query.Direction.ASCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if(error != null) {
-                            if (progressDialog.isShowing())
-                                progressDialog.dismiss();
-                            Log.e("Firestore error",error.getMessage());
-                            return ;
-                        }
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    postArrayList.add(dc.getDocument().toObject(Post.class));
-                                    break;
-                                    // 삭제시 업데이트: O(N) 소요 알고리즘 적용
-//                                case REMOVED:
-//                                    Post tmp = dc.getDocument().toObject(Post.class);
-//                                    for(int i = 0; i <postArrayList.size(); i++) {
-//                                        Post pi = postArrayList.get(i);
-//                                        int numElements = postArrayList.size();
-//                                        if(tmp.getFirstName().equals((pi.getFirstName()))) {
-//                                            postArrayList.set(i,postArrayList.get(numElements-1));
-//                                            postArrayList.set(numElements-1,pi);
-//                                            postArrayList.remove(numElements-1);
-//                                            i--;
-//                                        }
-//                                    }
-//                                    break;
-                            }
-                            mainAdapter.notifyDataSetChanged();
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
-                        }
-                    }
-                });
     }
 }
