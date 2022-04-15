@@ -1,5 +1,7 @@
 package com.example.lostandfind.data;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
@@ -26,10 +28,14 @@ public class Post implements Serializable {
     private String pattern = "yyyy-MM-dd HH:mm";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
+    private String imageName;
+
+
+
     public Post() {}
 
     //Constructor
-    public Post(String title, String text, String getting_item_time, String user_email, String user_name, String user_UID, String getting_item_place) {
+    public Post(String title, String text, String getting_item_time, String user_email, String user_name, String user_UID, String getting_item_place, String imageName) {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         this.time = simpleDateFormat.format(new Date()).toString();
         this.title = title;
@@ -40,6 +46,8 @@ public class Post implements Serializable {
         this.user_email = user_email;
         this.user_name = user_name;
         this.user_UID = user_UID;
+
+        this.imageName = imageName;
     }
 
     public String getGetting_item_place() {
@@ -104,5 +112,19 @@ public class Post implements Serializable {
 
     public void setUser_UID(String user_UID) {
         this.user_UID = user_UID;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.getImageName() + this.getTitle();
     }
 }

@@ -121,8 +121,9 @@ public class HomeFragment extends Fragment {
                                                 postArrayList.add(post);
                                             }
                                             mainAdapter.notifyDataSetChanged();
-                                            lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
-
+                                            if (task.getResult().size() != 0) {
+                                                lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+                                            }
                                             if (task.getResult().size() < limit) {
                                                 isLastItemReached = true;
                                             }
