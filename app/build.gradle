@@ -39,6 +39,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    // FloationgActionButton
+    implementation 'com.google.android.material:material:1.1.0-beta01'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation 'androidx.appcompat:appcompat:1.4.1'

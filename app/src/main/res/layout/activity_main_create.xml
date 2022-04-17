@@ -25,7 +25,29 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:orientation="vertical">
 
-        <!--    TODO: 상태 라디오버튼 선택 못하게 만들기, 카테고리 클릭하면 리스트 뜨게 만들기, 날짜 텍스트뷰 글씨 잘보이게-->
+        <!--    TODO: 카테고리 클릭하면 리스트 뜨게 만들기, 날짜 텍스트뷰 글씨 잘보이게-->
+        <!--        갤러리에서 이미지 선택-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_img"
+                android:layout_width="111dp"
+                android:layout_height="89dp"
+                android:layout_marginRight="15dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/darker_gray" />
+
         <!--        글 제목-->
         <!--        임시 텍스트 사이즈 14sp, padding 위아래 20 좌우 15-->
         <EditText
@@ -173,7 +195,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
                 app:srcCompat="@android:drawable/ic_menu_my_calendar" />
-
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -182,7 +203,7 @@
             android:layout_marginRight="15dp"
             android:background="@android:color/darker_gray"/>
 
-        <!--        상태: 보관 중/완료-->
+        <!--        상태: 보관 중/완료. 완료 버튼은 클릭 못함-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,7 +237,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="완료"/>
+                    android:enabled="false"
+                    android:text="완료" />
 
             </RadioGroup>
         </LinearLayout>

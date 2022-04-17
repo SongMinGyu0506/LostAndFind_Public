@@ -3,6 +3,7 @@ package com.example.lostandfind.activity.Main;
 import static android.widget.Toast.makeText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,7 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.data.UserData;
@@ -37,6 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.io.InputStream;
 import java.util.Calendar;
 
 public class MainCreateActivity extends AppCompatActivity {
@@ -47,6 +54,8 @@ public class MainCreateActivity extends AppCompatActivity {
     EditText etTitle, etCategory, etType, etPlace, etDate, etStatus,etDetails;
     Button btnAdd;
     Intent intent;
+    ImageView img;
+    private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
 
     // menu_activity_main.xml를 inflate
     @Override
@@ -83,6 +92,18 @@ public class MainCreateActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
+        // 이미지
+        img = findViewById(R.id.btn_img);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
         // 습득 및 분실 날짜
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -101,7 +122,7 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         }, year, month, day);
 
-        // 달력 아이콘을 버튼으로
+        // 달력 아이콘 클릭 이벤트
         btn_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,4 +196,23 @@ public class MainCreateActivity extends AppCompatActivity {
 //        });
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    Glide.with(getApplicationContext()).load(uri).into(img); // 다이얼로그 이미지 사진에 넣기
+                } catch (Exception e) {
+
+                }
+            } else if (resultCode == RESULT_CANCELED) { // 취소 시 호출할 행동
+
+            }
+        }
+    }
+
+
+
 }
