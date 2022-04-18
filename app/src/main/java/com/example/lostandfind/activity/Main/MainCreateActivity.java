@@ -65,6 +65,7 @@ public class MainCreateActivity extends AppCompatActivity {
     String user_name;
 
     // menu_activity_main.xml를 inflate
+    // testtest!!!! branch
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_main_create, menu) ;
