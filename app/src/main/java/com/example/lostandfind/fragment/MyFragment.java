@@ -1,13 +1,17 @@
 package com.example.lostandfind.fragment;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,16 @@ import com.example.lostandfind.activity.my.ModifyPwActivity;
 import com.example.lostandfind.activity.my.NoticeActivity;
 import com.example.lostandfind.activity.my.SetupAlertActivity;
 import com.example.lostandfind.activity.my.SetupDisturbActivity;
+import com.example.lostandfind.data.UserData;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MyFragment extends Fragment {
     ViewGroup rootView;
@@ -36,12 +50,36 @@ public class MyFragment extends Fragment {
 
     TextView logout_btn;
     TextView delete_account_btn;
+    TextView tvMyName,tvMyEmail;
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_my, container, false);
+        tvMyName = (TextView)rootView.findViewById(R.id.tvMyName);
+        tvMyEmail = (TextView)rootView.findViewById(R.id.tvMyEmail);
+
+        DocumentReference DRef = db.collection("Users").document(user.getUid());
+        DRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    tvMyName.setText(document.toObject(UserData.class).getName());
+                    tvMyEmail.setText(document.toObject(UserData.class).getEmail());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG,"Developer: User Error: ",e);
+            }
+        });
 
         // 공지사항을 누르면, 공지사항에 대한 페이지 실행
         notice_btn = rootView.findViewById(R.id.notice_btn);
@@ -59,6 +97,7 @@ public class MyFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ModifyNickActivity.class);
+                intent.putExtra("name",tvMyName.getText().toString());
                 startActivity(intent);
             }
         });

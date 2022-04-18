@@ -65,6 +65,7 @@
                         android:text="이름"/>
 
                     <TextView
+                        android:id="@+id/tvMyName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="나이름"/>
@@ -99,6 +100,7 @@
                         android:text="학교 이메일"/>
 
                     <TextView
+                        android:id="@+id/tvMyEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="xxxxx@kumoh.ac.kr"/>
