@@ -82,10 +82,10 @@ public class MainCreateActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_create : // "등록" 메뉴 클릭 시
                 String title = etTitle.getText().toString();
-                String category = etCategory.getText().toString();
+                //String category = etCategory.getText().toString();
                 String place = etPlace.getText().toString();
                 String date = etDate.getText().toString();
-                String status = etStatus.getText().toString();
+                //String status = etStatus.getText().toString();
                 String details = etDetails.getText().toString();
                 String user_email = user.getEmail().toString();
                 String user_uid = user.getUid().toString();
