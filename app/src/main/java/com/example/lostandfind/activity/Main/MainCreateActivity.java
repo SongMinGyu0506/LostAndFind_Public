@@ -28,6 +28,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,15 +59,16 @@ public class MainCreateActivity extends AppCompatActivity {
     UserData tmp_user;
     FirebaseFirestore db;
     FirebaseUser user;
-    EditText etTitle, etCategory, etType, etPlace, etDate, etStatus,etDetails;
+    ImageView img;
+    EditText etTitle, etCategory, etPlace, etDetails;
+    TextView etDate, etStatus;
+    RadioGroup radiogroup;
     Button btnAdd;
     Intent intent;
-    ImageView img;
     private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
     String user_name;
 
     // menu_activity_main.xml를 inflate
-    // testtest!!!! branch
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_main_create, menu) ;
@@ -80,7 +83,6 @@ public class MainCreateActivity extends AppCompatActivity {
             case R.id.action_create : // "등록" 메뉴 클릭 시
                 String title = etTitle.getText().toString();
                 String category = etCategory.getText().toString();
-                String type = etType.getText().toString();
                 String place = etPlace.getText().toString();
                 String date = etDate.getText().toString();
                 String status = etStatus.getText().toString();
@@ -134,6 +136,14 @@ public class MainCreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_create);
 
         etTitle = (EditText)findViewById(R.id.c_title);
+//        etCategory =
+//        type =
+        etPlace = (EditText)findViewById(R.id.c_place);
+        etDate = (TextView)findViewById(R.id.c_date);
+        radiogroup = (RadioGroup)findViewById(R.id.radio_status);
+//        etStatus = (TextView)findViewById(R.id.)
+        etDetails = (EditText)findViewById(R.id.c_details);
+
 
         // toolbar 생성, 타이틀 설정
         toolbar = findViewById(R.id.toolbar);
@@ -185,8 +195,18 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         });
 
-
-        EditText etTitle, etCategory, etType, etPlace, etDate, etStatus,etDetails;
+        // 상태(보관 중/완료)
+        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch(i) {
+                    case R.id.radio_keep:
+                        etStatus.setText("보관 중");
+                    case R.id.radio_complete:
+                        etStatus.setText("완료");
+                }
+            }
+        });
 
 
 
@@ -249,6 +269,8 @@ public class MainCreateActivity extends AppCompatActivity {
 //        });
 
     }
+
+    // 이미지 관련
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
