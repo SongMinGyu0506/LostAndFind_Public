@@ -28,6 +28,8 @@ import com.example.lostandfind.adapter.MainAdapter;
 import com.example.lostandfind.data.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -75,6 +77,15 @@ public class HomeFragment extends Fragment {
         mainAdapter = new MainAdapter(getActivity(), postArrayList);
         recyclerView.setAdapter(mainAdapter);
 
+        // FloatingActionButton
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.temp_upperBtn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), MainCreateActivity.class);
+                startActivity(intent);
+            }
+        });
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -137,14 +148,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        upper = rootView.findViewById(R.id.temp_upperBtn);
-        upper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MainCreateActivity.class);
-                startActivity(intent);
-            }
-        });
+
         return rootView;
     }
 }

@@ -1,8 +1,10 @@
 package com.example.lostandfind.activity.Main;
 
+import static android.content.ContentValues.TAG;
 import static android.widget.Toast.makeText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,7 +12,12 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,19 +31,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.data.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.io.InputStream;
 import java.util.Calendar;
 
 public class MainCreateActivity extends AppCompatActivity {
@@ -47,6 +60,9 @@ public class MainCreateActivity extends AppCompatActivity {
     EditText etTitle, etCategory, etType, etPlace, etDate, etStatus,etDetails;
     Button btnAdd;
     Intent intent;
+    ImageView img;
+    private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
+    String user_name;
 
     // menu_activity_main.xml를 inflate
     @Override
@@ -61,7 +77,50 @@ public class MainCreateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create : // "등록" 메뉴 클릭 시
-                makeText(getApplicationContext(), "등록 등록 등록",Toast.LENGTH_SHORT).show();
+                String title = etTitle.getText().toString();
+                String category = etCategory.getText().toString();
+                String type = etType.getText().toString();
+                String place = etPlace.getText().toString();
+                String date = etDate.getText().toString();
+                String status = etStatus.getText().toString();
+                String details = etDetails.getText().toString();
+                String user_email = user.getEmail().toString();
+                String user_uid = user.getUid().toString();
+
+
+                DocumentReference dRef = db.collection("Users").document(user_uid);
+                dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                UserData temp_user = document.toObject(UserData.class);
+                                user_name = temp_user.getName();
+                            } else {
+                                Log.d(TAG,"Developer: Error!");
+                            }
+                        }
+                    }
+                });
+
+                Post temp_post = new Post(title,details,date,
+                        user_email,user_name,user_uid,place,null);
+
+                db.collection("Posts").add(temp_post)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG,"add data");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG,"Error!",e);
+                    }
+                });
+
+                //makeText(getApplicationContext(), "등록 등록 등록",Toast.LENGTH_SHORT).show();
                 return true;
             default :
                 return super.onOptionsItemSelected(item);
@@ -73,6 +132,8 @@ public class MainCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_create);
 
+        etTitle = (EditText)findViewById(R.id.c_title);
+
         // toolbar 생성, 타이틀 설정
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("습득물/분실물 등록");
@@ -82,6 +143,18 @@ public class MainCreateActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+
+        // 이미지
+        img = findViewById(R.id.btn_img);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
 
         // 습득 및 분실 날짜
         Calendar calendar = Calendar.getInstance();
@@ -101,7 +174,7 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         }, year, month, day);
 
-        // 달력 아이콘을 버튼으로
+        // 달력 아이콘 클릭 이벤트
         btn_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,4 +248,23 @@ public class MainCreateActivity extends AppCompatActivity {
 //        });
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    Glide.with(getApplicationContext()).load(uri).into(img); // 다이얼로그 이미지 사진에 넣기
+                } catch (Exception e) {
+
+                }
+            } else if (resultCode == RESULT_CANCELED) { // 취소 시 호출할 행동
+
+            }
+        }
+    }
+
+
+
 }
