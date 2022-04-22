@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lostandfind.R;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
+    TextView toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +51,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         bottomNavigationView = findViewById(R.id.nav_bottom);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
 
         // 첫 화면 설정
+        toolbarTitle.setText("습득물");
         homeFragment = new HomeFragment();
-        toolbar.setTitle("홈1"); // toolbar title 설정
         getSupportFragmentManager().beginTransaction().add(R.id.container, homeFragment).commit();  // 출력
 
         // 바텀 네비게이션 클릭 시 발생하는 메소드
@@ -63,25 +68,25 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.tab1:     // 첫 번째 아이템 클릭 시, home1 프래그먼트로 이동
                         homeFragment = new HomeFragment();
-                        toolbar.setTitle("홈1"); // toolbar title 설정
+                        toolbarTitle.setText("습득물");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
 
                     case R.id.tab2:     // 두 번째 아이템 클릭 시, home2 프래그먼트로 이동
                         home2Fragment = new Home2Fragment();
-                        toolbar.setTitle("홈2"); // toolbar title 설정
+                        toolbarTitle.setText("분실물");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, home2Fragment).commit();
                         return true;
 
                     case R.id.tab3:     // 세 번째 아이템 클릭 시, chat 프래그먼트로 이동
                         chatFragment = new ChatFragment();
-                        toolbar.setTitle("채팅"); // toolbar title 설정
+                        toolbarTitle.setText("채팅");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
                         return true;
 
                     case R.id.tab4:     // 네 번째 아이템 클릭 시, my 프래그먼트로 이동
                         myFragment = new MyFragment();
-                        toolbar.setTitle("마이페이지");  // toolbar title 설정
+                        toolbarTitle.setText("마이페이지");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, myFragment).commit();
                         return true;
                 }
