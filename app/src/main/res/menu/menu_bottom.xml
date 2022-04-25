@@ -6,22 +6,22 @@
 <!--    TODO: [menu_bottom] 아이콘 변경 나중에 해야 함. 지금은 임시 아이콘-->
     <item
         android:id="@+id/tab1"
-        android:title="Item1"
+        android:title="습득물"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_email" />
+        android:icon="@drawable/ic_baseline_home_24" />
     <item
         android:id="@+id/tab2"
-        android:title="Item2"
+        android:title="분실물"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_email" />
+        android:icon="@drawable/ic_baseline_home_24" />
     <item
         android:id="@+id/tab3"
-        android:title="Item3"
+        android:title="채팅"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_info"/>
+        android:icon="@drawable/ic_baseline_chat_bubble_24"/>
     <item
         android:id="@+id/tab4"
-        android:title="Item4"
+        android:title="마이페이지"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_map"/>
+        android:icon="@drawable/ic_baseline_person_24"/>
 </menu>
