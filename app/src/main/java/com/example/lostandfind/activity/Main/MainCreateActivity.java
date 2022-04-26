@@ -56,7 +56,7 @@ import java.util.Calendar;
 
 public class MainCreateActivity extends AppCompatActivity {
     Toolbar toolbar;
-    UserData tmp_user;
+    UserData temp_user;
     FirebaseFirestore db;
     FirebaseUser user;
     ImageView img;
@@ -90,25 +90,8 @@ public class MainCreateActivity extends AppCompatActivity {
                 String user_email = user.getEmail().toString();
                 String user_uid = user.getUid().toString();
 
-
-                DocumentReference dRef = db.collection("Users").document(user_uid);
-                dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                UserData temp_user = document.toObject(UserData.class);
-                                user_name = temp_user.getName();
-                            } else {
-                                Log.d(TAG,"Developer: Error!");
-                            }
-                        }
-                    }
-                });
-
                 Post temp_post = new Post(title,details,date,
-                        user_email,user_name,user_uid,place,null);
+                        user_email,temp_user.getName(),user_uid,place,null);
 
                 db.collection("Posts").add(temp_post)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -164,6 +147,22 @@ public class MainCreateActivity extends AppCompatActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+        DocumentReference dRef = db.collection("Users").document(user.getUid());
+        dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        temp_user = document.toObject(UserData.class);
+                        //user_name = temp_user.getName().toString();
+                    } else {
+                        Log.d(TAG,"Developer: Error!");
+                    }
+                }
             }
         });
 
