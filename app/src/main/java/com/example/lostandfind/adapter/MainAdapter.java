@@ -31,12 +31,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     Context context;
     ArrayList<Post> postArrayList;
     FirebaseStorage storage;
+    private OnLoadMoreListener onLoadMoreListener;
 
     public MainAdapter(Context context, ArrayList<Post> postArrayList) {
         this.context = context;
         this.postArrayList = postArrayList;
         storage = FirebaseStorage.getInstance();
     }
+    public void clear() {postArrayList.clear();}
 
     @NonNull
     @Override
@@ -92,5 +94,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             text = itemView.findViewById(R.id.tvText);
             ivImage = itemView.findViewById(R.id.ivImage);
         }
+
+    }
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.onLoadMoreListener = mOnLoadMoreListener;
     }
 }

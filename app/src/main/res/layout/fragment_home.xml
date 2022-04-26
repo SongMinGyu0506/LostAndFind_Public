@@ -8,14 +8,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/layout_swipe"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/recyclerView"
-                android:backgroundTint="#9C3434" />
-
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/recyclerView"
+                    android:backgroundTint="#9C3434" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 <!--                FloatingActionButton-->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/temp_upperBtn"

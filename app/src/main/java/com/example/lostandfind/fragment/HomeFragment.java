@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +53,8 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
     ProgressDialog progressDialog;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     private int limit = 7;
     private DocumentSnapshot lastVisible;
     private boolean isScrolling = false;
@@ -63,7 +66,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
         db = FirebaseFirestore.getInstance();
-
+        swipeRefreshLayout = rootView.findViewById(R.id.layout_swipe);
         progressDialog = new ProgressDialog(getActivity());
 
         CollectionReference collectionReference = db.collection("Posts");
@@ -79,6 +82,12 @@ public class HomeFragment extends Fragment {
 
         // FloatingActionButton
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.temp_upperBtn);
+
+        //QueryExcuting
+        excuteQuery(query,collectionReference);
+        loadSwiper(swipeRefreshLayout,query,collectionReference);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +95,23 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        return rootView;
+    }
 
+    private void loadSwiper(SwipeRefreshLayout swipeRefreshLayout, Query query, CollectionReference collectionReference) {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(), "testSwipe", Toast.LENGTH_SHORT).show();
+                postArrayList.clear();
+                mainAdapter.clear();
+                excuteQuery(query,collectionReference);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void excuteQuery(Query query, CollectionReference collectionReference) {
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -148,7 +173,5 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
-        return rootView;
     }
 }
