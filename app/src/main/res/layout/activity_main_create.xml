@@ -19,13 +19,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--    텍스트 사이즈 14sp, padding 위아래 20 좌우 15-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:orientation="vertical">
 
-        <!--    TODO: 카테고리 클릭하면 리스트 뜨게 만들기, 날짜 텍스트뷰 글씨 잘보이게-->
         <!--        갤러리에서 이미지 선택-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +49,6 @@
             android:background="@android:color/darker_gray" />
 
         <!--        글 제목-->
-        <!--        임시 텍스트 사이즈 14sp, padding 위아래 20 좌우 15-->
         <EditText
             android:id="@+id/c_title"
             android:layout_width="match_parent"
@@ -71,72 +70,99 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
+            android:orientation="horizontal">
             <TextView
-                android:id="@+id/c_category"
+                android:id="@+id/label_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="20dp"
-                android:text="카테고리 선택" />
-
-            <ImageView
-                android:id="@+id/icon_angle_right"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
-                app:srcCompat="@drawable/angle_right_icon" />
-
+                android:paddingLeft="20dp"
+                android:text="카테고리" />
+            <Spinner
+                android:id="@+id/c_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="40dp"/>
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@android:color/darker_gray" />
 
-<!--        &lt;!&ndash;                구분: 습득/분실&ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal">-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/label_type"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:padding="20dp"-->
-<!--                android:paddingRight="30dp"-->
-<!--                android:text="구분" />-->
 
-<!--            <RadioGroup-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_marginLeft="50dp"-->
-<!--                android:layout_weight="1" >-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:clickable="true"-->
+        <!--            android:focusable="true"-->
+        <!--            android:foreground="?android:attr/selectableItemBackground">-->
 
-<!--                <RadioButton-->
-<!--                    android:id="@+id/radio_found"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:checked="true"-->
-<!--                    android:text="습득" />-->
+        <!--            <TextView-->
+        <!--                android:id="@+id/c_category"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:padding="20dp"-->
+        <!--                android:text="카테고리 선택" />-->
 
-<!--                <RadioButton-->
-<!--                    android:id="@+id/radio_lost"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text="분실"/>-->
+        <!--            <ImageView-->
+        <!--                android:id="@+id/icon_angle_right"-->
+        <!--                android:layout_width="30dp"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_marginRight="15dp"-->
+        <!--                app:srcCompat="@drawable/angle_right_icon" />-->
 
-<!--            </RadioGroup>-->
-<!--        </LinearLayout>-->
+        <!--        </LinearLayout>-->
+        <!--        <View-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="1dp"-->
+        <!--            android:layout_marginLeft="15dp"-->
+        <!--            android:layout_marginRight="15dp"-->
+        <!--            android:background="@android:color/darker_gray" />-->
+
+        <!--        &lt;!&ndash;                구분: 습득/분실&ndash;&gt;-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal">-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/label_type"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:padding="20dp"-->
+        <!--                android:paddingRight="30dp"-->
+        <!--                android:text="구분" />-->
+
+        <!--            <RadioGroup-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:orientation="horizontal"-->
+        <!--                android:layout_marginLeft="50dp"-->
+        <!--                android:layout_weight="1" >-->
+
+        <!--                <RadioButton-->
+        <!--                    android:id="@+id/radio_found"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:checked="true"-->
+        <!--                    android:text="습득" />-->
+
+        <!--                <RadioButton-->
+        <!--                    android:id="@+id/radio_lost"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:text="분실"/>-->
+
+        <!--            </RadioGroup>-->
+        <!--        </LinearLayout>-->
+
+
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -145,7 +171,6 @@
             android:background="@android:color/darker_gray"/>
 
         <!--        습득/분실 장소 입력-->
-        <!--        임시 텍스트 사이즈 14sp-->
         <EditText
             android:id="@+id/c_place"
             android:layout_width="match_parent"
@@ -251,7 +276,6 @@
             android:background="@android:color/darker_gray"/>
 
         <!--        상세 내용-->
-        <!--        임시 텍스트 사이즈 14sp-->
         <EditText
             android:id="@+id/c_details"
             android:layout_width="match_parent"

@@ -12,11 +12,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,12 +26,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,17 +57,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Text;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainCreateActivity extends AppCompatActivity {
     Toolbar toolbar;
-    UserData temp_user;
+    UserData tmp_user;
     FirebaseFirestore db;
     FirebaseUser user;
     ImageView img;
-    EditText etTitle, etCategory, etPlace, etDetails;
+    String imageName; // 파일명
+    EditText etTitle, etPlace, etDetails;
     TextView etDate, etStatus;
     RadioGroup radiogroup;
+    Spinner spinner; // 카테고리
     Button btnAdd;
     Intent intent;
     private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
@@ -82,16 +90,32 @@ public class MainCreateActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_create : // "등록" 메뉴 클릭 시
                 String title = etTitle.getText().toString();
-                //String category = etCategory.getText().toString();
+                String category = spinner.getSelectedItem().toString();
                 String place = etPlace.getText().toString();
                 String date = etDate.getText().toString();
-                //String status = etStatus.getText().toString();
+                String status = etStatus.getText().toString();
                 String details = etDetails.getText().toString();
                 String user_email = user.getEmail().toString();
                 String user_uid = user.getUid().toString();
 
-                Post temp_post = new Post(title,details,date,
-                        user_email,temp_user.getName(),user_uid,place,null);
+
+                DocumentReference dRef = db.collection("Users").document(user_uid);
+                dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                UserData temp_user = document.toObject(UserData.class);
+                                user_name = temp_user.getName();
+                            } else {
+                                Log.d(TAG,"Developer: Error!");
+                            }
+                        }
+                    }
+                });
+
+                Post temp_post = new Post(imageName, title, category, place, date, status, details, user_email, user_name, user_uid);
 
                 db.collection("Posts").add(temp_post)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -106,7 +130,7 @@ public class MainCreateActivity extends AppCompatActivity {
                     }
                 });
 
-                //makeText(getApplicationContext(), "등록 등록 등록",Toast.LENGTH_SHORT).show();
+                makeText(getApplicationContext(), "등록완료 이런 메시지..",Toast.LENGTH_SHORT).show();
                 return true;
             default :
                 return super.onOptionsItemSelected(item);
@@ -118,16 +142,6 @@ public class MainCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_create);
 
-        etTitle = (EditText)findViewById(R.id.c_title);
-//        etCategory =
-//        type =
-        etPlace = (EditText)findViewById(R.id.c_place);
-        etDate = (TextView)findViewById(R.id.c_date);
-        radiogroup = (RadioGroup)findViewById(R.id.radio_status);
-//        etStatus = (TextView)findViewById(R.id.)
-        etDetails = (EditText)findViewById(R.id.c_details);
-
-
         // toolbar 생성, 타이틀 설정
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("습득물/분실물 등록");
@@ -137,6 +151,12 @@ public class MainCreateActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+
+        etTitle = (EditText)findViewById(R.id.c_title);
+        etPlace = (EditText)findViewById(R.id.c_place);
+        etDate = (TextView)findViewById(R.id.c_date);
+        radiogroup = (RadioGroup)findViewById(R.id.radio_status); // 상태(보관 중/완료)
+        etDetails = (EditText)findViewById(R.id.c_details);
 
         // 이미지
         img = findViewById(R.id.btn_img);
@@ -150,21 +170,23 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         });
 
-        DocumentReference dRef = db.collection("Users").document(user.getUid());
-        dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        temp_user = document.toObject(UserData.class);
-                        //user_name = temp_user.getName().toString();
-                    } else {
-                        Log.d(TAG,"Developer: Error!");
-                    }
-                }
-            }
-        });
+        // 카테고리
+        ArrayList<String> category = new ArrayList<String>();
+        category.add("가방");
+        category.add("귀금속");
+        category.add("도서");
+        category.add("스포츠용품");
+        category.add("악기");
+        category.add("의류");
+        category.add("전자기기");
+        category.add("지갑");
+        category.add("카드");
+        category.add("현금");
+        category.add("휴대폰");
+        category.add("기타");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_text, category);
+        ((Spinner)findViewById(R.id.c_category)).setAdapter(adapter);
+        spinner = (Spinner)findViewById(R.id.c_category);
 
         // 습득 및 분실 날짜
         Calendar calendar = Calendar.getInstance();
@@ -206,8 +228,6 @@ public class MainCreateActivity extends AppCompatActivity {
                 }
             }
         });
-
-
 
 
 //        etDate = (EditText)findViewById(R.id.c_date);
@@ -277,6 +297,7 @@ public class MainCreateActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 try {
                     Uri uri = data.getData();
+                    imageName = uri.getLastPathSegment(); // 파일path에서 파일명만 가져오기
                     Glide.with(getApplicationContext()).load(uri).into(img); // 다이얼로그 이미지 사진에 넣기
                 } catch (Exception e) {
 
@@ -286,7 +307,4 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 }

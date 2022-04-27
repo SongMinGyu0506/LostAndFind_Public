@@ -14,10 +14,13 @@ public class Post implements Serializable {
     private String time; //Post 작성 날짜
 
     //Post Information
+    private String imageName; //이미지
     private String title; //Post 제목
-    private String text; //Post 본문
+    private String category; //카테고리
+    private String getting_item_place; //장소
     private String getting_item_time; //분실,습득 날짜
-    private String getting_item_place;
+    private String status; //상태
+    private String text; //Post 본문
 
     //User Data
     /*User Data는 Post 작성시 Current User data를 이용하여 저장한다.*/
@@ -28,26 +31,25 @@ public class Post implements Serializable {
     private String pattern = "yyyy-MM-dd HH:mm";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-    private String imageName;
-
-
 
     public Post() {}
 
     //Constructor
-    public Post(String title, String text, String getting_item_time, String user_email, String user_name, String user_UID, String getting_item_place, String imageName) {
+    public Post(String imageName, String title, String category, String getting_item_place, String getting_item_time, String status, String text, String user_email, String user_name, String user_UID) {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         this.time = simpleDateFormat.format(new Date()).toString();
+
+        this.imageName = imageName;
         this.title = title;
-        this.text = text;
-        this.getting_item_time = getting_item_time;
+        this.category = category;
         this.getting_item_place = getting_item_place;
+        this.getting_item_time = getting_item_time;
+        this.status = status;
+        this.text = text;
 
         this.user_email = user_email;
         this.user_name = user_name;
         this.user_UID = user_UID;
-
-        this.imageName = imageName;
     }
 
     public String getGetting_item_place() {
@@ -72,6 +74,22 @@ public class Post implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getText() {
