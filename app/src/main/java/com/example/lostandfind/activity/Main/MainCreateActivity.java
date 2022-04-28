@@ -68,8 +68,9 @@ public class MainCreateActivity extends AppCompatActivity {
     ImageView img;
     String imageName; // 파일명
     EditText etTitle, etPlace, etDetails;
-    TextView etDate, etStatus;
-    RadioGroup radiogroup;
+    TextView etDate;
+    RadioGroup radiogroup; // 상태(보관 중/완료)
+    String Status;
     Spinner spinner; // 카테고리
     Button btnAdd;
     Intent intent;
@@ -93,7 +94,7 @@ public class MainCreateActivity extends AppCompatActivity {
                 String category = spinner.getSelectedItem().toString();
                 String place = etPlace.getText().toString();
                 String date = etDate.getText().toString();
-                String status = etStatus.getText().toString();
+                String status = Status;
                 String details = etDetails.getText().toString();
                 String user_email = user.getEmail().toString();
                 String user_uid = user.getUid().toString();
@@ -129,10 +130,8 @@ public class MainCreateActivity extends AppCompatActivity {
                         Log.w(TAG,"Error!",e);
                     }
                 });
-
-                makeText(getApplicationContext(), "등록완료 이런 메시지..",Toast.LENGTH_SHORT).show();
                 return true;
-            default :
+            default:
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -216,20 +215,6 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         });
 
-        // 상태(보관 중/완료)
-        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch(i) {
-                    case R.id.radio_keep:
-                        etStatus.setText("보관 중");
-                    case R.id.radio_complete:
-                        etStatus.setText("완료");
-                }
-            }
-        });
-
-
 //        etDate = (EditText)findViewById(R.id.c_date);
 //        etDate.setKeyListener(null);
 //        etDate.setOnClickListener(new View.OnClickListener() {
@@ -305,6 +290,24 @@ public class MainCreateActivity extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED) { // 취소 시 호출할 행동
 
             }
+        }
+    }
+
+    // 체크된 라디오 버튼 값을 String인 Status에 저장
+    public void onRadioButtonClicked(View v) {
+        boolean checked = ((RadioButton) v).isChecked();
+        switch(v.getId()){
+            case R.id.radio_keep:
+                if(checked) {
+                    Status="보관 중";
+                }
+                break;
+
+            case R.id.radio_complete:
+                if(checked) {
+                    Status="완료";
+                }
+                break;
         }
     }
 }
