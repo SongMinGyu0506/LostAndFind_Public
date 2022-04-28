@@ -42,6 +42,7 @@ import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.data.UserData;
+import com.example.lostandfind.query.main.MainCreateQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,6 +54,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
@@ -76,6 +80,10 @@ public class MainCreateActivity extends AppCompatActivity {
     Intent intent;
     private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
     String user_name;
+    MainCreateQuery mainCreateQuery;
+    Uri uri;
+
+//    private FirebaseStorage storage;
 
     // menu_activity_main.xml를 inflate
     @Override
@@ -96,40 +104,47 @@ public class MainCreateActivity extends AppCompatActivity {
                 String date = etDate.getText().toString();
                 String status = Status;
                 String details = etDetails.getText().toString();
-                String user_email = user.getEmail().toString();
-                String user_uid = user.getUid().toString();
+                String user_email = mainCreateQuery.getUserEmail();
+                String user_uid = mainCreateQuery.getUserUid();
+//                String user_email = user.getEmail().toString();
+//                String user_uid = user.getUid().toString();
+
+                mainCreateQuery.imageUpload(uri,imageName);
+//                StorageReference storageRef = storage.getReference();
+//                StorageReference riverRef = storageRef.child("photo/"+imageName);
+//                UploadTask uploadTask = riverRef.putFile(uri);
+//
+//                uploadTask.addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.e(TAG,"Developer: Image Upload Error:",e);
+//                    }
+//                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        makeText(MainCreateActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
 
-                DocumentReference dRef = db.collection("Users").document(user_uid);
-                dRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                UserData temp_user = document.toObject(UserData.class);
-                                user_name = temp_user.getName();
-                            } else {
-                                Log.d(TAG,"Developer: Error!");
-                            }
-                        }
-                    }
-                });
+                //Post temp_post = new Post(imageName, title, category, place, date, status, details, user_email, tmp_user.getName(), user_uid);
 
-                Post temp_post = new Post(imageName, title, category, place, date, status, details, user_email, user_name, user_uid);
-
-                db.collection("Posts").add(temp_post)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG,"add data");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG,"Error!",e);
-                    }
-                });
+                mainCreateQuery.registerPost(new Post(imageName, title, category, place, date, status, details, user_email, tmp_user.getName(), user_uid));
+//                db.collection("Posts").add(temp_post)
+//                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                            @Override
+//                            public void onSuccess(DocumentReference documentReference) {
+//                                Log.d(TAG,"add data");
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG,"Error!",e);
+//                    }
+//                });
+                Intent intent = new Intent(MainCreateActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -148,8 +163,27 @@ public class MainCreateActivity extends AppCompatActivity {
         setSupportActionBar(toolbar); // toolbar를 액티비티의 App Bar로 지정
         ActionBar appbar = getSupportActionBar(); // toolbar에 대한 참조 획득
 
+        mainCreateQuery = new MainCreateQuery(this);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+//        storage = FirebaseStorage.getInstance();
+
+        //user_name = mainCreateQuery.getUserName();
+
+        db.collection("Users")
+                .whereEqualTo("uid",user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                tmp_user = documentSnapshot.toObject(UserData.class);
+                            }
+                        }
+                    }
+                });
 
         etTitle = (EditText)findViewById(R.id.c_title);
         etPlace = (EditText)findViewById(R.id.c_place);
@@ -215,26 +249,8 @@ public class MainCreateActivity extends AppCompatActivity {
             }
         });
 
-//        etDate = (EditText)findViewById(R.id.c_date);
-//        etDate.setKeyListener(null);
-//        etDate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-////                InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-////                inputManager.hideSoftInputFromWindow(etDate.getWindowToken(),0);
-//                new DatePickerDialog(MainCreateActivity.this,myDatePicker,myCalendar.get(Calendar.YEAR),
-//                        myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
-//        etTitle = (EditText)findViewById(R.id.c_title);
-//        etText = (EditText)findViewById(R.id.etText);
-//        etPlace = (EditText)findViewById(R.id.etPlace);
-//        btnAdd = (Button)findViewById(R.id.btnAdd);
-//
-//
-//
-//        //작성자 유저 데이터 데이터베이스에서 가져옴
+        //작성자 유저 데이터 데이터베이스에서 가져옴
+//        tmp_user = mainCreateQuery.getUserData();
 //        db.collection("Users")
 //                .whereEqualTo("uid",user.getUid())
 //                .get()
@@ -246,32 +262,6 @@ public class MainCreateActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-//
-//        //등록 버튼 클릭할 때
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                // 게시글 객체 생성
-//                Post post = new Post(etTitle.getText().toString(),
-//                        etText.getText().toString(),
-//                        etDate.getText().toString()
-//                        ,user.getEmail(),
-//                        tmp_user.getName(),
-//                        user.getUid(),
-//                        etPlace.getText().toString());
-//
-//                // 디비에 등록함
-//                db.collection("Posts").add(post);
-//
-//                // 다시 액티비티 돌아가야 하는데 리사이클러 뷰 업데이트 시켜줘야함
-//                intent = new Intent();
-//                intent.putExtra("post",post);
-//                setResult(Activity.RESULT_OK,intent);
-//                finish();
-//            }
-//        });
-
     }
 
     // 이미지 관련
@@ -281,11 +271,11 @@ public class MainCreateActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    Uri uri = data.getData();
+                    uri = data.getData();
                     imageName = uri.getLastPathSegment(); // 파일path에서 파일명만 가져오기
                     Glide.with(getApplicationContext()).load(uri).into(img); // 다이얼로그 이미지 사진에 넣기
                 } catch (Exception e) {
-
+                    Log.e(TAG,"Developer Log: Error",e);
                 }
             } else if (resultCode == RESULT_CANCELED) { // 취소 시 호출할 행동
 

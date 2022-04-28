@@ -125,6 +125,7 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
+
     private void nextQueryExcute(Query nextQuery) {
         nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
