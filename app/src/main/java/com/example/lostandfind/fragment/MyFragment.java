@@ -1,17 +1,12 @@
 package com.example.lostandfind.fragment;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,16 +22,7 @@ import com.example.lostandfind.activity.my.ModifyPwActivity;
 import com.example.lostandfind.activity.my.NoticeActivity;
 import com.example.lostandfind.activity.my.SetupAlertActivity;
 import com.example.lostandfind.activity.my.SetupDisturbActivity;
-import com.example.lostandfind.data.UserData;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.lostandfind.query.myfragment.MyFragementQuery;
 
 public class MyFragment extends Fragment {
     ViewGroup rootView;
@@ -52,9 +38,10 @@ public class MyFragment extends Fragment {
     TextView delete_account_btn;
     TextView tvMyName,tvMyEmail;
 
-    FirebaseAuth auth = FirebaseAuth.getInstance();
+    MyFragementQuery dao;
+    /*FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,23 +51,24 @@ public class MyFragment extends Fragment {
         tvMyName = (TextView)rootView.findViewById(R.id.tvMyName);
         tvMyEmail = (TextView)rootView.findViewById(R.id.tvMyEmail);
 
-        DocumentReference DRef = db.collection("Users").document(user.getUid());
-        DRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    tvMyName.setText(document.toObject(UserData.class).getName());
-                    tvMyEmail.setText(document.toObject(UserData.class).getEmail());
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG,"Developer: User Error: ",e);
-            }
-        });
-
+        dao = new MyFragementQuery();
+//        DocumentReference DRef = db.collection("Users").document(user.getUid());
+//        DRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    tvMyName.setText(document.toObject(UserData.class).getName());
+//                    tvMyEmail.setText(document.toObject(UserData.class).getEmail());
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.w(TAG,"Developer: User Error: ",e);
+//            }
+//        });
+        dao.setMyFragmentUserData(tvMyName,tvMyEmail);
         // 공지사항을 누르면, 공지사항에 대한 페이지 실행
         notice_btn = rootView.findViewById(R.id.notice_btn);
         notice_btn.setOnClickListener(new View.OnClickListener() {

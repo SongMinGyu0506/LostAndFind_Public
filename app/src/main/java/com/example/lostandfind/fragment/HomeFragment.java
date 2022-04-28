@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
 
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private int limit = 7;
+    private int limit = 5;
     private DocumentSnapshot lastVisible;
     private boolean isScrolling = false;
     private boolean isLastItemReached = false;
@@ -95,7 +95,55 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+
+                if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+                    isScrolling = false;
+                    Query nextQuery = collectionReference.orderBy("title", Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit);
+                    nextQueryExcute(nextQuery);
+                }
+            }
+        };
+        recyclerView.addOnScrollListener(onScrollListener);
         return rootView;
+    }
+
+    private void nextQueryExcute(Query nextQuery) {
+        nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (DocumentSnapshot d: task.getResult()) {
+                        Post post = d.toObject(Post.class);
+                        postArrayList.add(post);
+                    }
+                    mainAdapter.notifyDataSetChanged();
+                    if (task.getResult().size() != 0) {
+                        lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+                    }
+                    if (task.getResult().size() <limit) {
+                        isLastItemReached = true;
+                    }
+                }
+            }
+        });
     }
 
     private void loadSwiper(SwipeRefreshLayout swipeRefreshLayout, Query query, CollectionReference collectionReference) {
@@ -122,54 +170,6 @@ public class HomeFragment extends Fragment {
                     }
                     mainAdapter.notifyDataSetChanged();
                     lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
-
-                    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                isScrolling = true;
-                            }
-                        }
-                        @Override
-                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-
-
-
-                            LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-                            int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                            int visibleItemCount = linearLayoutManager.getChildCount();
-                            int totalItemCount = linearLayoutManager.getItemCount();
-
-                            if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-                                isScrolling = false;
-
-
-
-                                Query nextQuery = collectionReference.orderBy("title",Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit);
-                                nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (DocumentSnapshot d : task.getResult()) {
-                                                Post post = d.toObject(Post.class);
-                                                postArrayList.add(post);
-                                            }
-                                            mainAdapter.notifyDataSetChanged();
-                                            if (task.getResult().size() != 0) {
-                                                lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
-                                            }
-                                            if (task.getResult().size() < limit) {
-                                                isLastItemReached = true;
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    };
-                    recyclerView.addOnScrollListener(onScrollListener);
                 }
             }
         });

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.activity.Main.MainActivity;
+import com.example.lostandfind.query.login.LoginAuthQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
+    private LoginAuthQuery loginAuthQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +41,13 @@ public class LoginActivity extends AppCompatActivity {
         inputPW = (EditText)findViewById(R.id.inputText_PW);
         findPassword = (Button)findViewById(R.id.btn_FindPassword);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.setLanguageCode("ko");
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-        firebaseAuth.signOut();
-
+//        firebaseAuth = FirebaseAuth.getInstance();
+//        firebaseAuth.setLanguageCode("ko");
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        firebaseAuth.signOut();
+        loginAuthQuery = new LoginAuthQuery(this);
+        loginAuthQuery.setSignOut();
 //        TODO: [LoginActivity] 아래의 ActionBar 내용 확인 후 지우기
         // !!!!! ActionBar는 values-theme에서 수정하였음 !!!!!
 //        ActionBar actionBar = getSupportActionBar();
@@ -65,44 +68,44 @@ public class LoginActivity extends AppCompatActivity {
                 else {
                     String email = inputID.getText().toString().trim();
                     String pw = inputPW.getText().toString().trim();
-
-                    firebaseAuth.signInWithEmailAndPassword(email,pw)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    if (task.isSuccessful()) {
-                                        if (user.isEmailVerified()) {
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(LoginActivity.this,"Not Vertiy Email",Toast.LENGTH_SHORT).show();
-                                        }
-                                         // 추가해도 될까?
-                                    } else {
-                                        if (user == null) {
-                                            Toast.makeText(LoginActivity.this,"사용자 계정 없음",Toast.LENGTH_SHORT).show();
-                                            inputID.setText("");
-                                            inputPW.setText("");
-                                            return;
-                                        }
-                                        else if (user != null) {
-                                            //Toast.makeText(LoginActivity.this,"",Toast.LENGTH_SHORT).show();
-                                            Toast.makeText(LoginActivity.this,"비밀번호 오류",Toast.LENGTH_SHORT).show();
-                                            inputPW.setText("");
-                                            firebaseAuth.signOut();
-                                            return;
-                                        } else {
-                                            Toast.makeText(LoginActivity.this,"로그인 실패",Toast.LENGTH_SHORT).show();
-                                            inputID.setText("");
-                                            inputPW.setText("");
-                                            return;
-                                        }
-
-                                    }
-                                }
-                            });
+                    loginAuthQuery.loginEmailAndPassword(email,pw,inputID,inputPW);
+//                    firebaseAuth.signInWithEmailAndPassword(email,pw)
+//                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<AuthResult> task) {
+//                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                                    if (task.isSuccessful()) {
+//                                        if (user.isEmailVerified()) {
+//                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                            startActivity(intent);
+//                                            finish();
+//                                        } else {
+//                                            Toast.makeText(LoginActivity.this,"Not Vertiy Email",Toast.LENGTH_SHORT).show();
+//                                        }
+//                                         // 추가해도 될까?
+//                                    } else {
+//                                        if (user == null) {
+//                                            Toast.makeText(LoginActivity.this,"사용자 계정 없음",Toast.LENGTH_SHORT).show();
+//                                            inputID.setText("");
+//                                            inputPW.setText("");
+//                                            return;
+//                                        }
+//                                        else if (user != null) {
+//                                            //Toast.makeText(LoginActivity.this,"",Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(LoginActivity.this,"비밀번호 오류",Toast.LENGTH_SHORT).show();
+//                                            inputPW.setText("");
+//                                            firebaseAuth.signOut();
+//                                            return;
+//                                        } else {
+//                                            Toast.makeText(LoginActivity.this,"로그인 실패",Toast.LENGTH_SHORT).show();
+//                                            inputID.setText("");
+//                                            inputPW.setText("");
+//                                            return;
+//                                        }
+//
+//                                    }
+//                                }
+//                            });
                 }
             }
         });
