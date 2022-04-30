@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.lostandfind.activity.Main.MainInspectActivity;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
+import com.example.lostandfind.query.main.MainAdapterQuery;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,7 +31,8 @@ import java.util.ArrayList;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
     Context context;
     ArrayList<Post> postArrayList;
-    FirebaseStorage storage;
+    //FirebaseStorage storage;
+    MainAdapterQuery mainAdapterQuery;
     private OnLoadMoreListener onLoadMoreListener;
 
 
@@ -41,7 +43,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public MainAdapter(Context context, ArrayList<Post> postArrayList) {
         this.context = context;
         this.postArrayList = postArrayList;
-        storage = FirebaseStorage.getInstance();
+        //storage = FirebaseStorage.getInstance();
+        mainAdapterQuery = new MainAdapterQuery(context);
     }
     /*
     * 초기화 함수, 어댑터에 저장되어있는 리스트를 전부 제거
@@ -68,23 +71,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.text.setText(post.getText());
         Log.d(TAG,"Developer: "+post.toString());
 
-        //71~72line : 파이어베이스에 있는 이미지 저장소의 경로를 가져오고, 이미지를 가져오는 작업 실시
-        StorageReference ref = FirebaseStorage.getInstance().getReference();
-        //photo가 이미지 저장 디렉토리, post.getImageName()이 가져와야할 이미지 이름
-        ref.child("photo/"+post.getImageName()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                //이미지 가져오는데 성공했으면 holder.ivImage에 이미지 삽입
-                Glide.with(context).load(uri).into(holder.ivImage);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //Toast.makeText(context,"Failed",Toast.LENGTH_SHORT).show();
-                //실패했을 경우 drawable에 있는 kumoh_symbol을 사용
-                holder.ivImage.setImageResource(R.drawable.kumoh_symbol);
-            }
-        });
+        mainAdapterQuery.getStorageImage(holder.ivImage, post);
 
         //Glide.with(context).load(ref).into(holder.ivImage);
         /*

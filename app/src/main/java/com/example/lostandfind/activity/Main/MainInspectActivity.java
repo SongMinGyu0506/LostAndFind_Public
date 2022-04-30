@@ -6,10 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
+import com.example.lostandfind.query.main.MainInspectQuery;
 
 //TODO: [작성자:송민규] 임시로 메인 엑티비티에서 값만 넘긴상태, 추후 UI 및 데이터 가공작업 필수
 //상세내용 액티비티
@@ -18,8 +20,10 @@ public class MainInspectActivity extends AppCompatActivity {
     Post post;
 
     TextView title, text, textView6, location, date, email, name, textView11;
-
+    ImageView image;
     Toolbar toolbar;
+
+    MainInspectQuery mainInspectQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +36,13 @@ public class MainInspectActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_close_24);
+        mainInspectQuery = new MainInspectQuery(this);
 
         title = (TextView)findViewById(R.id.title);
         text = (TextView)findViewById(R.id.text);
 //        textView6 = (TextView)findViewById(R.id.textView6);
         location = (TextView)findViewById(R.id.location);
+        image = (ImageView)findViewById(R.id.image);
         date = (TextView)findViewById(R.id.date);
         email = (TextView)findViewById(R.id.email);
 //        name = (TextView)findViewById(R.id.textView10);
@@ -53,6 +59,7 @@ public class MainInspectActivity extends AppCompatActivity {
         email.setText(post.getUser_email()); //
 //        name.setText(post.getUser_name());
 //        textView11.setText(post.getUser_UID());
+        mainInspectQuery.getStorageImage(post,image);
     }
 
     @Override
