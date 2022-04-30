@@ -15,10 +15,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -88,8 +92,16 @@ public class MainCreateActivity extends AppCompatActivity {
     // menu_activity_main.xml를 inflate
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_activity_main_create, menu) ;
-
+        getMenuInflater().inflate(R.menu.menu_activity_main_create, menu);
+        
+        // "등록" 메뉴 색상 설정
+        for(int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            SpannableString spanString = new SpannableString(menu.getItem(i).getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); // fix the color to white
+//            spanString.setSpan(new AbsoluteSizeSpan(18, true), 0, spanString.length(), 0); // fix the text size to 18dp
+            item.setTitle(spanString);
+        }
         return true ;
     }
 
@@ -97,7 +109,8 @@ public class MainCreateActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_create : // "등록" 메뉴 클릭 시
+            // "등록" 메뉴 클릭 시
+            case R.id.action_create :
                 String title = etTitle.getText().toString();
                 String category = spinner.getSelectedItem().toString();
                 String place = etPlace.getText().toString();
@@ -146,6 +159,12 @@ public class MainCreateActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
+
+            // "X" 클릭 시
+            case android.R.id.home:
+                finish();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -158,10 +177,13 @@ public class MainCreateActivity extends AppCompatActivity {
 
         // toolbar 생성, 타이틀 설정
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("습득물/분실물 등록");
-
         setSupportActionBar(toolbar); // toolbar를 액티비티의 App Bar로 지정
         ActionBar appbar = getSupportActionBar(); // toolbar에 대한 참조 획득
+
+        // toolbar - 뒤로 가기
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_close_24);
 
         mainCreateQuery = new MainCreateQuery(this);
 
