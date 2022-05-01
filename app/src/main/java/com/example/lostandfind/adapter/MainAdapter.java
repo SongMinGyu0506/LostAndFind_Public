@@ -35,7 +35,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     MainAdapterQuery mainAdapterQuery;
     private OnLoadMoreListener onLoadMoreListener;
 
-
     /*
      * 생성자, 현재 액티비티와 그 액티비티의 리스트를 파라미터로 입력받음
      * storage 변수는 파이어베이스에 저장되어있는 이미지를 가져오기 위해 인스턴스를 가져옴
