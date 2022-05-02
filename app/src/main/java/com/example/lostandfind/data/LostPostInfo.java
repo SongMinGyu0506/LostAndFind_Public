@@ -8,7 +8,7 @@ public class LostPostInfo {
     private String category;    //분실한 물건의 종류
     private String postDate;    //게시글 작성 날짜
     private String name;    //작성자 이름
-//    private String image;   //이미지 이름
+    private String image;   //이미지 이름
     private String writerUID;   //작성자 uid
 
 
@@ -19,7 +19,7 @@ public class LostPostInfo {
 
     public LostPostInfo(String title, String contents, String location,
                         String lostDate, String category, String postDate,
-                        String name, String writerUID){
+                        String name, String writerUID, String image){
         this.title = title;
         this.contents = contents;
         this.location = location;
@@ -27,10 +27,17 @@ public class LostPostInfo {
         this.category = category;
         this.postDate = postDate;
         this.name = name;
-//        this.image = image;
+        this.image = image;
         this.writerUID = writerUID;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getTitle() {
         return title;

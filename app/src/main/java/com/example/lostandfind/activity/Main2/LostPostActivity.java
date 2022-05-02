@@ -82,6 +82,8 @@ public class LostPostActivity extends AppCompatActivity {
 
         initializeView();
 
+        storage = FirebaseStorage.getInstance();
+
         setActionbar();
         setCategory();
         getUserData();
@@ -222,7 +224,8 @@ public class LostPostActivity extends AppCompatActivity {
         final String category = spinner.getSelectedItem().toString();
         final String postDate = getCurTime();
         final String userName = name;
-        toast("image Name3: "+imageName);
+        final String n_image = imageName;
+        //toast("image Name3: "+imageName);
 
         if (title.length() > 0 && contents.length() > 0) {
             LostPostInfo lostPostInfo = new LostPostInfo
@@ -230,7 +233,7 @@ public class LostPostActivity extends AppCompatActivity {
                     location, lostDate,
                     category, postDate,
                     userName,
-                    user.getUid());
+                    user.getUid(),n_image);
             uploader(lostPostInfo);
             finish();
         } else {
@@ -240,6 +243,23 @@ public class LostPostActivity extends AppCompatActivity {
 
     //게시글 업로더
     private void uploader(LostPostInfo lostPostInfo){
+        StorageReference storageRef = storage.getReference();
+        StorageReference photoRef = storageRef.child("photo/"+imageName);
+        UploadTask uploadTask  = photoRef.putFile(imageUri);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG,"Developer Error Log: Image Upload Error",e);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(LostPostActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         db.collection("LostPosts").add(lostPostInfo)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

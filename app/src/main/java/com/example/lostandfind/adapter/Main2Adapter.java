@@ -1,6 +1,7 @@
 package com.example.lostandfind.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,11 @@ import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.LostPostInfo;
 import com.example.lostandfind.data.Post;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -23,10 +27,12 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
     //adapter에 들어갈 list
     private ArrayList<LostPostInfo> arrayList;
     private Context context;
+    private FirebaseStorage storage;
 
     public Main2Adapter(ArrayList<LostPostInfo> arrayList, Context context){
         this.arrayList = arrayList;
         this.context = context;
+        this.storage = FirebaseStorage.getInstance();
 
     }
 
@@ -73,17 +79,18 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
         private TextView location;
         private TextView lostDate;
         private TextView postDate;
+        private ImageView imageDate;
 
 
         public Main2ViewHolder(View itemView) {
             super(itemView);
 
-//            imageView = itemView.findViewById(R.id.imageView);
             title = itemView.findViewById(R.id.title);
             contents = itemView.findViewById(R.id.contents);
             location = itemView.findViewById(R.id.location);
             lostDate = itemView.findViewById(R.id.lostDate);
             postDate = itemView.findViewById(R.id.postDate);
+            imageDate = itemView.findViewById(R.id.imageView);
         }
         public void setItem(LostPostInfo item) {
             title.setText(item.getTitle());
@@ -91,6 +98,20 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
             location.setText(item.getLocation());
             lostDate.setText(item.getLostDate());
             postDate.setText(item.getPostDate());
+
+            StorageReference ref = FirebaseStorage.getInstance().getReference();
+            ref.child("photo/"+item.getImage()).getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Glide.with(context).load(uri).into(imageDate);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    imageDate.setImageResource(R.drawable.kumoh_symbol);
+                }
+            });
         }
     }
 }
