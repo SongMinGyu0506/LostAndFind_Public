@@ -32,6 +32,7 @@ public class LoginAuthQuery {
     }
 
     public void loginEmailAndPassword(String email, String pw, EditText inputID, EditText inputPW) {
+        auth = FirebaseAuth.getInstance();
         auth.signInWithEmailAndPassword(email,pw)
             .addOnCompleteListener((LoginActivity)context, new OnCompleteListener<AuthResult>() {
                 @Override

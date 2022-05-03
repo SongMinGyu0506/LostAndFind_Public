@@ -19,7 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.lostandfind.R;
@@ -28,6 +31,7 @@ import com.example.lostandfind.activity.Main.MainCreateActivity;
 import com.example.lostandfind.adapter.MainAdapter;
 import com.example.lostandfind.data.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,8 +42,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +59,15 @@ public class HomeFragment extends Fragment {
     MainAdapter mainAdapter;
     FirebaseFirestore db;
     ProgressDialog progressDialog;
-
+    Spinner sp_Search;
+    Button btn_Search;
     SwipeRefreshLayout swipeRefreshLayout;
 
     private int limit = 5;
     private DocumentSnapshot lastVisible;
     private boolean isScrolling = false;
     private boolean isLastItemReached = false;
+    private String temp_spSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,8 +78,13 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout = rootView.findViewById(R.id.layout_swipe);
         progressDialog = new ProgressDialog(getActivity());
 
+        btn_Search = (Button)rootView.findViewById(R.id.btn_Search);
+
+        setSpinnerData(sp_Search);
+
         CollectionReference collectionReference = db.collection("Posts");
         Query query = collectionReference.orderBy("title",Query.Direction.ASCENDING).limit(limit);
+        Query query2 = collectionReference.orderBy("getting_item_time",Query.Direction.DESCENDING);
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -122,7 +136,96 @@ public class HomeFragment extends Fragment {
             }
         };
         recyclerView.addOnScrollListener(onScrollListener);
+        Spinner spinner = (Spinner)rootView.findViewById(R.id.sp_Search);
+        temp_spSearch = spinner.getSelectedItem().toString();
+        searchClickEvent(btn_Search,query2);
+
         return rootView;
+    }
+
+    private void searchClickEvent(Button btn_search, Query query) {
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postArrayList.clear();
+                mainAdapter.clear();
+                searchPosts(query);
+
+            }
+        });
+    }
+
+    private void searchPosts(Query query){
+        String toString2 = sp_Search.getSelectedItem().toString().trim();
+        db = FirebaseFirestore.getInstance();
+        if (toString2 == "전체") {
+            db.collection("Posts")
+                    .orderBy("getting_item_time",Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    Post post = document.toObject(Post.class);
+                                    postArrayList.add(post);
+                                }
+                            } else {
+                                Log.e(TAG,"Developer Log:", task.getException());
+                            }
+                            mainAdapter.notifyDataSetChanged();
+                            lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+                        }
+                    });
+        }else {
+            db.collection("Posts")
+                    .whereEqualTo("category",toString2)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    Post post = document.toObject(Post.class);
+                                    postArrayList.add(post);
+                                }
+                            } else {
+                                Log.e(TAG,"Developer Log:", task.getException());
+                            }
+                            mainAdapter.notifyDataSetChanged();
+                            if (task.getResult().size() != 0)
+                                lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG,"Developer Log: NULL!",e);
+                }
+            });
+        }
+    }
+
+    private void setSpinnerData(Spinner sp_search) {
+        ArrayList<String> category = new ArrayList<String>();
+        category.add("전체");
+        category.add("가방");
+        category.add("귀금속");
+        category.add("도서");
+        category.add("스포츠용품");
+        category.add("악기");
+        category.add("의류");
+        category.add("전자기기");
+        category.add("지갑");
+        category.add("카드");
+        category.add("현금");
+        category.add("휴대폰");
+        category.add("기타");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_text, category);
+        ((Spinner)rootView.findViewById(R.id.sp_Search)).setAdapter(adapter);
+        sp_Search = (Spinner) rootView.findViewById(R.id.sp_Search);
+        sp_Search.setSelection(0);
+
     }
 
 
