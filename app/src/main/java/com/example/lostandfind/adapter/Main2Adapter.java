@@ -83,7 +83,6 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
 
     //viewHolder. subView setting
     public class Main2ViewHolder extends RecyclerView.ViewHolder {
-//        private ImageView imageView;
         private TextView title;
         private TextView contents;
         private TextView location;

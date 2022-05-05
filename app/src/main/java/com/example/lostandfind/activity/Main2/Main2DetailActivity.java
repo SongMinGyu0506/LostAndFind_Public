@@ -44,7 +44,7 @@ public class Main2DetailActivity extends AppCompatActivity {
         setActionbar();     //Actionbar 관련 설정
         getIntentData();    //넘어오는 Intent data get
         setStorageImage(lostPostInfo, image);   //image get, imageView set
-        setTextView();  //TextView
+        setTextView();  //TextView set
     }
 
     public void initializeView()
