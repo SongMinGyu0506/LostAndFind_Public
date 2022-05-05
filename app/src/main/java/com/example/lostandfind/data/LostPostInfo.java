@@ -1,6 +1,8 @@
 package com.example.lostandfind.data;
 
-public class LostPostInfo {
+import java.io.Serializable;
+
+public class LostPostInfo implements Serializable {
     private String title;   //게시글 제목
     private String contents;    //게시글 내용
     private String location;    //잃어버린 장소
