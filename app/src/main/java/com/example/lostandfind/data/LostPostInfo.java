@@ -13,7 +13,6 @@ public class LostPostInfo implements Serializable {
     private String image;   //이미지 이름
     private String writerUID;   //작성자 uid
 
-
     //기본 생성자
     public LostPostInfo(){
 
@@ -36,7 +35,6 @@ public class LostPostInfo implements Serializable {
     public String getImage() {
         return image;
     }
-
     public void setImage(String image) {
         this.image = image;
     }
@@ -59,7 +57,6 @@ public class LostPostInfo implements Serializable {
     public void setWriterUID(String writerUID) {
         this.writerUID = writerUID;
     }
-
     public String getLocation() {
         return location;
     }
@@ -90,11 +87,4 @@ public class LostPostInfo implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-//    public String getImage() {
-//        return image;
-//    }
-//    public void setImage(String image) {
-//        this.image = image;
-//    }
 }

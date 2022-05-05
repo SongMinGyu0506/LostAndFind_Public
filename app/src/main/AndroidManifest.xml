@@ -16,6 +16,9 @@
             android:name=".activity.Main.Main2InspectActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.Main2.Main2DetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.Main2.LostPostActivity"
             android:exported="false" />
         <activity

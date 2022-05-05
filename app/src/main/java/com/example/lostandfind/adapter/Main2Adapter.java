@@ -14,16 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
-import com.example.lostandfind.activity.Main.Main2InspectActivity;
 import com.example.lostandfind.activity.Main.MainInspectActivity;
+import com.example.lostandfind.activity.Main2.Main2DetailActivity;
 import com.example.lostandfind.data.LostPostInfo;
 import com.example.lostandfind.data.Post;
+import com.example.lostandfind.query.main.MainAdapterQuery;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHolder> {
@@ -52,20 +54,15 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
     //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
     //item을 하나하나 보여주는 함수
     @Override
-    public void onBindViewHolder(@NonNull Main2Adapter.Main2ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Main2ViewHolder holder, int position) {
         LostPostInfo lostPostInfo = arrayList.get(position);
         holder.setItem(lostPostInfo);
-//        holder.title.setText(lostPostInfo.getTitle());
-//        holder.contents.setText(lostPostInfo.getContents());
-//        holder.location.setText(lostPostInfo.getLocation());
-//        holder.lostDate.setText(lostPostInfo.getLostDate());
-//        holder.postDate.setText(lostPostInfo.getPostDate());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Main2InspectActivity.class);
-                intent.putExtra("lostpost",lostPostInfo);
+                Intent intent = new Intent(context, Main2DetailActivity.class);
+                intent.putExtra("lostPostInfo", lostPostInfo);
                 context.startActivity(intent);
             }
         });
@@ -85,13 +82,12 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
 
     //viewHolder. subView setting
     public class Main2ViewHolder extends RecyclerView.ViewHolder {
-//        private ImageView imageView;
         private TextView title;
         private TextView contents;
         private TextView location;
         private TextView lostDate;
         private TextView postDate;
-        private ImageView imageDate;
+        private ImageView image;
 
 
         public Main2ViewHolder(View itemView) {
@@ -102,8 +98,9 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
             location = itemView.findViewById(R.id.location);
             lostDate = itemView.findViewById(R.id.lostDate);
             postDate = itemView.findViewById(R.id.postDate);
-            imageDate = itemView.findViewById(R.id.imageView);
+            image = itemView.findViewById(R.id.imageView);
         }
+
         public void setItem(LostPostInfo item) {
             title.setText(item.getTitle());
             contents.setText(item.getContents());
@@ -116,12 +113,12 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
                     .addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Glide.with(context).load(uri).into(imageDate);
+                            Glide.with(context).load(uri).into(image);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    imageDate.setImageResource(R.drawable.kumoh_symbol);
+                    image.setImageResource(R.drawable.kumoh_symbol);
                 }
             });
         }

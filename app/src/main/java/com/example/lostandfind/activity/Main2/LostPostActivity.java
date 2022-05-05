@@ -5,10 +5,8 @@ import static android.content.ContentValues.TAG;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -22,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+//[TODO: 현재 이미지 업로드 안하고 게시글 올릴 시 앱 죽는 버그 있음]
 public class LostPostActivity extends AppCompatActivity {
     private final static String TAG = "LostPostActivity";
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
