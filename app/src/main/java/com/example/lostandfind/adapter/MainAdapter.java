@@ -66,8 +66,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         Post post = postArrayList.get(position); //ArrayList에 있는 post 내용들을 포지션(0~n)까지 하나씩 가져옴
-        holder.title.setText(post.getTitle()); //객체 내에 있는 내용들 setText
-        holder.text.setText(post.getText());
+        holder.tvTitle.setText(post.getTitle()); //객체 내에 있는 내용들 setText
+        holder.tvContents.setText(post.getText());
+        holder.tvLocation.setText(post.getGetting_item_place());
+        holder.tvLostDate.setText(post.getGetting_item_time());
+        holder.tvPostDate.setText(post.getTime());
         Log.d(TAG,"Developer: "+post.toString());
 
         mainAdapterQuery.getStorageImage(holder.ivImage, post);
@@ -93,14 +96,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     //뷰 홀더 객체
     public class MainViewHolder extends RecyclerView.ViewHolder {
-        TextView UID,title,text;
+        TextView tvTitle, tvContents, tvLocation, tvPostDate, tvLostDate;
         ImageView ivImage;
         public MainViewHolder(@NonNull View itemView) {
             super(itemView);
-            UID = itemView.findViewById(R.id.tvUID);
-            title = itemView.findViewById(R.id.tvTitle);
-            text = itemView.findViewById(R.id.tvText);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvContents = itemView.findViewById(R.id.tvContents);
             ivImage = itemView.findViewById(R.id.ivImage);
+            tvPostDate = itemView.findViewById(R.id.tvPostDate);
+            tvLostDate = itemView.findViewById(R.id.tvLostDate);
         }
 
     }
