@@ -1,6 +1,7 @@
 package com.example.lostandfind.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.Main.Main2InspectActivity;
+import com.example.lostandfind.activity.Main.MainInspectActivity;
 import com.example.lostandfind.data.LostPostInfo;
 import com.example.lostandfind.data.Post;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,6 +60,15 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
 //        holder.location.setText(lostPostInfo.getLocation());
 //        holder.lostDate.setText(lostPostInfo.getLostDate());
 //        holder.postDate.setText(lostPostInfo.getPostDate());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, Main2InspectActivity.class);
+                intent.putExtra("lostpost",lostPostInfo);
+                context.startActivity(intent);
+            }
+        });
     }
 
     //전체 데이터 수 반환
