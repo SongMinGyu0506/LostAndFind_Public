@@ -33,7 +33,6 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
     private ArrayList<LostPostInfo> arrayList;
     private Context context;
     private FirebaseStorage storage;
-    MainAdapterQuery mainAdapterQuery;
 
     public Main2Adapter(ArrayList<LostPostInfo> arrayList, Context context){
         this.arrayList = arrayList;

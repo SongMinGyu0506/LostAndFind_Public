@@ -57,7 +57,6 @@ public class LostPostInfo implements Serializable {
     public void setWriterUID(String writerUID) {
         this.writerUID = writerUID;
     }
-
     public String getLocation() {
         return location;
     }

@@ -167,30 +167,6 @@
 
     </RelativeLayout>
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_marginLeft="14dp"-->
-<!--        android:layout_marginTop="5dp">-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="작성일: "-->
-<!--            android:textSize="10sp"-->
-<!--            android:textStyle="bold"/>-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/postDate"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="postDate"-->
-<!--            android:textSize="10sp"-->
-<!--            android:layout_marginLeft="3dp"/>-->
-
-<!--    </LinearLayout>-->
-
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -232,28 +208,5 @@
             android:text="채팅 걸기"/>
 
     </RelativeLayout>
-
-    <!--TODO: [main_inspect] Chat으로 넘어가는 버튼은 만들지 않았음. 진도에 따라서 추가 예정-->
-
-    <!--TODO: [main_inspect] 혹시나 필요할까봐 일단 남겨둠-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView10"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="50dp"-->
-    <!--        android:text="Name" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView6"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="TextView" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView11"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="TextView" />-->
 
 </LinearLayout>

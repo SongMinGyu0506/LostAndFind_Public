@@ -78,7 +78,6 @@ public class Main2DetailActivity extends AppCompatActivity {
 
     private void getIntentData(){
         Intent intent = getIntent();
-        //객체로 받아옴
         lostPostInfo = (LostPostInfo)intent.getSerializableExtra("lostPostInfo");
     }
 
