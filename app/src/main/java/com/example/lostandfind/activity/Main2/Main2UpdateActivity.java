@@ -137,6 +137,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
         }
         spinner.setSelection(index);
 
+        imageName = lostPostInfo.getImage();
         StorageReference ref = FirebaseStorage.getInstance().getReference();
         ref.child("photo/"+lostPostInfo.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
