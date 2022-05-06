@@ -42,7 +42,6 @@ import java.util.Calendar;
 public class Main2UpdateActivity extends AppCompatActivity {
     private final static String TAG = "Main2UpdateActivity";
     private FirebaseStorage storage = FirebaseStorage.getInstance();
-
     LostPostInfo lostPostInfo;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
