@@ -121,8 +121,9 @@ public class MainCreateActivity extends AppCompatActivity {
                 String user_uid = mainCreateQuery.getUserUid();
 //                String user_email = user.getEmail().toString();
 //                String user_uid = user.getUid().toString();
-
-                mainCreateQuery.imageUpload(uri,imageName);
+                if (uri != null && imageName != null) {
+                    mainCreateQuery.imageUpload(uri,imageName);
+                }
 //                StorageReference storageRef = storage.getReference();
 //                StorageReference riverRef = storageRef.child("photo/"+imageName);
 //                UploadTask uploadTask = riverRef.putFile(uri);
