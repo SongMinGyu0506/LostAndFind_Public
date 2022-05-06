@@ -23,6 +23,7 @@ import com.example.lostandfind.activity.my.NoticeActivity;
 import com.example.lostandfind.activity.my.SetupAlertActivity;
 import com.example.lostandfind.activity.my.SetupDisturbActivity;
 import com.example.lostandfind.query.myfragment.MyFragementQuery;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MyFragment extends Fragment {
     ViewGroup rootView;
@@ -37,6 +38,7 @@ public class MyFragment extends Fragment {
     TextView logout_btn;
     TextView delete_account_btn;
     TextView tvMyName,tvMyEmail;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     MyFragementQuery dao;
     /*FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -131,6 +133,7 @@ public class MyFragment extends Fragment {
                         .setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                auth.signOut();
                                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);

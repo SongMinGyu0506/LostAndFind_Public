@@ -82,6 +82,7 @@ public class Home2Fragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 LostPostInfo lostPostInfo = document.toObject(LostPostInfo.class); //여기
+                                lostPostInfo.setId(document.getId());
                                 arrayList.add(lostPostInfo);
                             }
                         } else {
