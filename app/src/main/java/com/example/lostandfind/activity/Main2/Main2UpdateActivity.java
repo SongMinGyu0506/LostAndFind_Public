@@ -9,12 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -42,7 +45,6 @@ public class Main2UpdateActivity extends AppCompatActivity {
 
     LostPostInfo lostPostInfo;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String upTitle, upContents, upLocation, upLostDate, upPostDate, upCategory, upName, upImageName, upWriterUID;
 
     TextView lostDate, confirm_btn;
     EditText title, contents, location;
@@ -75,7 +77,6 @@ public class Main2UpdateActivity extends AppCompatActivity {
             switch(view.getId()){
                 case R.id.confirm_btn:
                     updatePost();
-//                    imageUpload(imageUri, imageName);
                     break;
                 case R.id.lostDate_btn:
                     setCalender();
@@ -152,6 +153,8 @@ public class Main2UpdateActivity extends AppCompatActivity {
     }
 
     private void updatePost() {
+        String upTitle, upContents, upLocation, upLostDate, upPostDate, upCategory, upName, upImageName, upWriterUID;
+
         upTitle = title.getText().toString();
         upContents = contents.getText().toString();
         upLocation = location.getText().toString();
@@ -308,5 +311,20 @@ public class Main2UpdateActivity extends AppCompatActivity {
     //토스트 메소드 간략화
     public void toast(String text){
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    // EditText가 아닌 다른 곳 터치 시 키보드 내리기
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            view.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + view.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + view.getTop() - scrcoords[1];
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

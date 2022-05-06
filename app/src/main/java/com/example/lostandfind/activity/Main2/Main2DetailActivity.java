@@ -43,11 +43,8 @@ import com.google.firebase.storage.StorageReference;
 public class Main2DetailActivity extends AppCompatActivity {
     private final static String TAG = "Main2DetailActivity";
 
-    LostPostInfo lostPostInfo;
-    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String upTitle, upContents, upLocation, upLostDate, upPostDate, upCategory, upName, upImageName, upWriterUID;
+    LostPostInfo lostPostInfo;
 
     TextView title, contents, location, lostDate, postDate, category;
     ImageView image;
@@ -79,14 +76,44 @@ public class Main2DetailActivity extends AppCompatActivity {
                     updatePost();
                     break;
                 case R.id.delete_btn:
-                    deletePost();
+                    deletePostAlert();
                     break;
             }
         }
     };
 
-    private void deletePost() {
+    private void deletePost(){
+        db.collection("LostPosts").document(lostPostInfo.getId()).delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            toast("post deleted");
+                            finish();
+                        }
+                    }
+                });
+    }
+
+    private void deletePostAlert() {
         Toast.makeText(getApplicationContext(), "되나?", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("게시글 삭제 알림");
+        builder.setMessage("게시글을 삭제 하시겠습니까?");
+        builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deletePost();
+            }
+        });
+        builder.setNegativeButton("아니", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog ad = builder.create();
+        ad.show();
     }
 
     private void updatePost() {
