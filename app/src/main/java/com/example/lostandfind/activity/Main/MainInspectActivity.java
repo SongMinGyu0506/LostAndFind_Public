@@ -6,10 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.chatting.MainChattingActivity;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.query.main.MainInspectQuery;
 
@@ -20,6 +23,7 @@ public class MainInspectActivity extends AppCompatActivity {
     Post post;
 
     TextView title, text, textView6, location, date, email, name, textView11;
+    Button chatBtn;
     ImageView image;
     Toolbar toolbar;
 
@@ -48,6 +52,8 @@ public class MainInspectActivity extends AppCompatActivity {
 //        name = (TextView)findViewById(R.id.textView10);
 //        textView11 = (TextView)findViewById(R.id.textView11);
 
+        chatBtn = (Button)findViewById(R.id.chatBtn);
+
         intent = getIntent();
         post = (Post)intent.getSerializableExtra("post");
 
@@ -60,6 +66,16 @@ public class MainInspectActivity extends AppCompatActivity {
 //        name.setText(post.getUser_name());
 //        textView11.setText(post.getUser_UID());
         mainInspectQuery.getStorageImage(post,image);
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainInspectActivity.this, MainChattingActivity.class);
+                intent.putExtra("user_email",post.getUser_email());
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
