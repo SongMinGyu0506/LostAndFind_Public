@@ -1,7 +1,5 @@
 package com.example.lostandfind.activity.Main2;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,11 +27,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.LostPostInfo;
 import com.example.lostandfind.data.UserData;
-import com.example.lostandfind.query.main.MainCreateQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-//[TODO: 현재 이미지 업로드 안하고 게시글 올릴 시 앱 죽는 버그 있음]
+//[TODO: 이미지 업로드 안하고 게시글 올릴 시 앱 죽는 버그 !!!!!!!!고쳤음!!!!!!!!!]
 public class LostPostActivity extends AppCompatActivity {
     private final static String TAG = "LostPostActivity";
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -61,17 +57,12 @@ public class LostPostActivity extends AppCompatActivity {
     private StorageReference reference = FirebaseStorage.getInstance().getReference();
     Toolbar toolbar;
 
-    TextView lostDate;
-    ImageView lostDate_btn;
+    TextView lostDate, confirm_btn;
     Spinner spinner;
-    TextView confirm_btn;
 
-    ImageView img;
+    ImageView lostDate_btn, img, image1;
     private Uri imageUri;
-    String imageName;
-    ImageView image1;
-
-    String name;
+    String imageName = "", name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +91,7 @@ public class LostPostActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch(view.getId()){
                 case R.id.confirm_btn:
-                    postUpdate();
-//                    imageUpload(imageUri, imageName);
+                    postRegister();
                     break;
                 case R.id.lostDate_btn:
                     setCalender();
@@ -214,7 +204,7 @@ public class LostPostActivity extends AppCompatActivity {
     }
 
     //게시글 업데이트
-    private void postUpdate(){
+    private void postRegister(){
         final String title = ((EditText) findViewById(R.id.title)).getText().toString();
         final String contents = ((EditText) findViewById(R.id.contents)).getText().toString();
         final String location = ((EditText) findViewById(R.id.location)).getText().toString();
@@ -235,28 +225,29 @@ public class LostPostActivity extends AppCompatActivity {
             uploader(lostPostInfo);
             finish();
         } else {
-            toast("내용을 입력하세요.");
+            toast("제목과 내용을 입력하세요.");
         }
     }
 
     //게시글 업로더
     private void uploader(LostPostInfo lostPostInfo){
-        StorageReference storageRef = storage.getReference();
-        StorageReference photoRef = storageRef.child("photo/"+imageName);
-        UploadTask uploadTask  = photoRef.putFile(imageUri);
+        if (imageName.length() > 0){
+            StorageReference storageRef = storage.getReference();
+            StorageReference photoRef = storageRef.child("photo/"+imageName);
+            UploadTask uploadTask  = photoRef.putFile(imageUri);
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG,"Developer Error Log: Image Upload Error",e);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(LostPostActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG,"Developer Error Log: Image Upload Error",e);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(LostPostActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         db.collection("LostPosts").add(lostPostInfo)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -308,13 +299,13 @@ public class LostPostActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    //토스트 메소드 간략화
 
+    //토스트 메소드 간략화
     public void toast(String text){
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
-    // EditText가 아닌 다른 곳 터치 시 키보드 내리기
 
+    // EditText가 아닌 다른 곳 터치 시 키보드 내리기
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View view = getCurrentFocus();

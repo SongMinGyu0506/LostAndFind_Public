@@ -1,8 +1,12 @@
 package com.example.lostandfind.data;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 
 public class LostPostInfo implements Serializable {
+    @Exclude private String id;
+
     private String title;   //게시글 제목
     private String contents;    //게시글 내용
     private String location;    //잃어버린 장소
@@ -30,6 +34,13 @@ public class LostPostInfo implements Serializable {
         this.name = name;
         this.image = image;
         this.writerUID = writerUID;
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImage() {

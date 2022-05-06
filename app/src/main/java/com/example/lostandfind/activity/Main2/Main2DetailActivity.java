@@ -1,39 +1,59 @@
 package com.example.lostandfind.activity.Main2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.login.LoginActivity;
 import com.example.lostandfind.data.LostPostInfo;
 import com.example.lostandfind.data.Post;
+import com.example.lostandfind.data.UserData;
 import com.example.lostandfind.query.main.MainInspectQuery;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class Main2DetailActivity extends AppCompatActivity {
-    LostPostInfo lostPostInfo;
+    private final static String TAG = "Main2DetailActivity";
 
+    LostPostInfo lostPostInfo;
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String upTitle, upContents, upLocation, upLostDate, upPostDate, upCategory, upName, upImageName, upWriterUID;
 
     TextView title, contents, location, lostDate, postDate, category;
     ImageView image;
     Toolbar toolbar;
+
+    TextView update_btn, delete_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +65,35 @@ public class Main2DetailActivity extends AppCompatActivity {
         getIntentData();    //넘어오는 Intent data get
         setStorageImage(lostPostInfo, image);   //image get, imageView set
         setTextView();  //TextView set
+
+        update_btn.setOnClickListener(onClickListener);
+        delete_btn.setOnClickListener(onClickListener);
+    }
+
+    //버튼 리스너
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch(view.getId()){
+                case R.id.update_btn:
+                    updatePost();
+                    break;
+                case R.id.delete_btn:
+                    deletePost();
+                    break;
+            }
+        }
+    };
+
+    private void deletePost() {
+        Toast.makeText(getApplicationContext(), "되나?", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updatePost() {
+        finish();
+        Intent intent = new Intent(this, Main2UpdateActivity.class);
+        intent.putExtra("lostPostInfo", lostPostInfo);
+        startActivity(intent);
     }
 
     public void initializeView()
@@ -57,6 +106,9 @@ public class Main2DetailActivity extends AppCompatActivity {
         postDate = (TextView)findViewById(R.id.postDate);
         category = (TextView)findViewById(R.id.category);
         image = (ImageView)findViewById(R.id.image);
+
+        update_btn = (TextView)findViewById(R.id.update_btn);
+        delete_btn = (TextView)findViewById(R.id.delete_btn);
     }
 
     private void setActionbar(){
@@ -107,5 +159,10 @@ public class Main2DetailActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //토스트 메소드 간략화
+    public void toast(String text){
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }
