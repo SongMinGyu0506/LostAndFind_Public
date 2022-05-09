@@ -9,28 +9,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.text.SpannableString;
-import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -40,7 +29,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
@@ -48,46 +36,34 @@ import com.example.lostandfind.data.Post;
 import com.example.lostandfind.data.UserData;
 import com.example.lostandfind.query.main.MainCreateQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainCreateActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    UserData tmp_user;
     FirebaseFirestore db;
     FirebaseUser user;
-    ImageView img;
+
+    UserData tmp_user;
+    MainCreateQuery mainCreateQuery;
     String imageName; // 파일명
+    Uri uri;
+    private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
+    String user_name;
+
+    Toolbar toolbar;
+    ImageView img;
     EditText etTitle, etPlace, etDetails;
     TextView etDate;
     RadioGroup radiogroup; // 상태(보관 중/완료)
     String Status;
     Spinner spinner; // 카테고리
-    Button btnAdd;
-    Intent intent;
-    private static final int REQUEST_CODE = 0; // 이미지 사진 요청코드
-    String user_name;
-    MainCreateQuery mainCreateQuery;
-    Uri uri;
-
-//    private FirebaseStorage storage;
 
     // menu_activity_main.xml를 inflate
     @Override
@@ -115,47 +91,21 @@ public class MainCreateActivity extends AppCompatActivity {
                 String category = spinner.getSelectedItem().toString();
                 String place = etPlace.getText().toString();
                 String date = etDate.getText().toString();
-                String status = Status;
+                //String status = Status;
                 String details = etDetails.getText().toString();
                 String user_email = mainCreateQuery.getUserEmail();
                 String user_uid = mainCreateQuery.getUserUid();
 //                String user_email = user.getEmail().toString();
 //                String user_uid = user.getUid().toString();
-                if (uri != null && imageName != null) {
+
+
+                if (uri != null) {
                     mainCreateQuery.imageUpload(uri,imageName);
+                } else {
+                    imageName = "";
                 }
-//                StorageReference storageRef = storage.getReference();
-//                StorageReference riverRef = storageRef.child("photo/"+imageName);
-//                UploadTask uploadTask = riverRef.putFile(uri);
-//
-//                uploadTask.addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.e(TAG,"Developer: Image Upload Error:",e);
-//                    }
-//                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        makeText(MainCreateActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                mainCreateQuery.registerPost(new Post(imageName, title, category, place, date, details, user_email, tmp_user.getName(), user_uid));
 
-
-                //Post temp_post = new Post(imageName, title, category, place, date, status, details, user_email, tmp_user.getName(), user_uid);
-
-                mainCreateQuery.registerPost(new Post(imageName, title, category, place, date, status, details, user_email, tmp_user.getName(), user_uid));
-//                db.collection("Posts").add(temp_post)
-//                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                            @Override
-//                            public void onSuccess(DocumentReference documentReference) {
-//                                Log.d(TAG,"add data");
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG,"Error!",e);
-//                    }
-//                });
                 Intent intent = new Intent(MainCreateActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -190,9 +140,6 @@ public class MainCreateActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
-//        storage = FirebaseStorage.getInstance();
-
-        //user_name = mainCreateQuery.getUserName();
 
         db.collection("Users")
                 .whereEqualTo("uid",user.getUid())
@@ -271,20 +218,6 @@ public class MainCreateActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //작성자 유저 데이터 데이터베이스에서 가져옴
-//        tmp_user = mainCreateQuery.getUserData();
-//        db.collection("Users")
-//                .whereEqualTo("uid",user.getUid())
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                            tmp_user = document.toObject(UserData.class);
-//                        }
-//                    }
-//                });
     }
 
     // 이미지 관련

@@ -16,6 +16,7 @@ public class LostPostInfo implements Serializable {
     private String name;    //작성자 이름
     private String image;   //이미지 이름
     private String writerUID;   //작성자 uid
+    private String writerEmail; //작성자 Email
 
     //기본 생성자
     public LostPostInfo(){
@@ -24,7 +25,7 @@ public class LostPostInfo implements Serializable {
 
     public LostPostInfo(String title, String contents, String location,
                         String lostDate, String category, String postDate,
-                        String name, String writerUID, String image){
+                        String name, String writerUID, String image, String writerEmail){
         this.title = title;
         this.contents = contents;
         this.location = location;
@@ -34,6 +35,7 @@ public class LostPostInfo implements Serializable {
         this.name = name;
         this.image = image;
         this.writerUID = writerUID;
+        this.writerEmail = writerEmail;
     }
 
     public String getId() {
@@ -97,5 +99,12 @@ public class LostPostInfo implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public String getWriterEmail() {
+        return writerEmail;
+    }
+
+    public void setWriterEmail(String writerEmail) {
+        this.writerEmail = writerEmail;
     }
 }

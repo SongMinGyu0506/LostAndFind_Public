@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
-import com.example.lostandfind.adapter.MainAdapter;
 import com.example.lostandfind.data.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +28,7 @@ public class MainAdapterQuery {
         StorageReference ref = FirebaseStorage.getInstance().getReference();
 
         //photo가 이미지 저장 디렉토리, post.getImageName()이 가져와야할 이미지 이름
-        ref.child("photo/"+post.getImageName()).getDownloadUrl()
+        ref.child("photo/"+post.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {

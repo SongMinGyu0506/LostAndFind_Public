@@ -221,7 +221,7 @@ public class LostPostActivity extends AppCompatActivity {
                     location, lostDate,
                     category, postDate,
                     userName,
-                    user.getUid(),n_image);
+                    user.getUid(),n_image, user.getEmail());
             uploader(lostPostInfo);
             finish();
         } else {

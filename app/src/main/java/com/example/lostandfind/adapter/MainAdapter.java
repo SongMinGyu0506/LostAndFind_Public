@@ -4,27 +4,20 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.lostandfind.activity.Main.MainInspectActivity;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.query.main.MainAdapterQuery;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -67,10 +60,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         Post post = postArrayList.get(position); //ArrayList에 있는 post 내용들을 포지션(0~n)까지 하나씩 가져옴
         holder.tvTitle.setText(post.getTitle()); //객체 내에 있는 내용들 setText
-        holder.tvContents.setText(post.getText());
-        holder.tvLocation.setText(post.getGetting_item_place());
-        holder.tvLostDate.setText(post.getGetting_item_time());
-        holder.tvPostDate.setText(post.getTime());
+        holder.tvContents.setText(post.getContents());
+        holder.tvLocation.setText(post.getLocation());
+        holder.tvLostDate.setText(post.getLostDate());
+        holder.tvPostDate.setText(post.getPostDate());
         Log.d(TAG,"Developer: "+post.toString());
 
         mainAdapterQuery.getStorageImage(holder.ivImage, post);

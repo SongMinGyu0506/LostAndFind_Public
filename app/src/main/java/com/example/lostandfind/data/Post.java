@@ -2,70 +2,59 @@ package com.example.lostandfind.data;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.Timestamp;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class Post implements Serializable {
-    //Post Meta Data
-    private String time; //Post 작성 날짜
-
-    //Post Information
-    private String imageName; //이미지
     private String title; //Post 제목
+    private String contents; //Post 본문
+    private String location;
+    private String lostDate;
     private String category; //카테고리
-    private String getting_item_place; //장소
-    private String getting_item_time; //분실,습득 날짜
-    private String status; //상태
-    private String text; //Post 본문
-
-    //User Data
-    /*User Data는 Post 작성시 Current User data를 이용하여 저장한다.*/
-    private String user_email;
-    private String user_name;
-    private String user_UID;
+    private String postDate; //Post 작성 날짜
+    private String name;
+    private String image; //이미지
+    private String writerUID;
+    private String writerEmail;
 
     private String pattern = "yyyy-MM-dd HH:mm";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
     public Post() {}
-
     //Constructor
-    public Post(String imageName, String title, String category, String getting_item_place, String getting_item_time, String status, String text, String user_email, String user_name, String user_UID) {
+    public Post(String imageName, String title, String category, String location, String lostDate, String content, String writerEmail, String name, String writerUID) {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-        this.time = simpleDateFormat.format(new Date()).toString();
+        this.postDate = simpleDateFormat.format(new Date()).toString();
 
-        this.imageName = imageName;
+        this.image = imageName;
         this.title = title;
         this.category = category;
-        this.getting_item_place = getting_item_place;
-        this.getting_item_time = getting_item_time;
-        this.status = status;
-        this.text = text;
+        this.location = location;
+        this.lostDate = lostDate;
+        this.contents = content;
 
-        this.user_email = user_email;
-        this.user_name = user_name;
-        this.user_UID = user_UID;
+        this.writerEmail = writerEmail;
+        this.name = name;
+        this.writerUID = writerUID;
     }
 
-    public String getGetting_item_place() {
-        return getting_item_place;
+    public String getLocation() {
+        return location;
     }
 
-    public void setGetting_item_place(String getting_item_place) {
-        this.getting_item_place = getting_item_place;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public String getTime() {
-        return time;
+    public String getPostDate() {
+        return postDate;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setPostDate(String postDate) {
+        this.postDate = postDate;
     }
 
     public String getTitle() {
@@ -84,65 +73,57 @@ public class Post implements Serializable {
         this.category = category;
     }
 
-    public String getStatus() {
-        return status;
+    public String getContents() {
+        return contents;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
-    public String getText() {
-        return text;
+    public String getLostDate() {
+        return lostDate;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setLostDate(String lostDate) {
+        this.lostDate = lostDate;
     }
 
-    public String getGetting_item_time() {
-        return getting_item_time;
+    public String getWriterEmail() {
+        return writerEmail;
     }
 
-    public void setGetting_item_time(String getting_item_time) {
-        this.getting_item_time = getting_item_time;
+    public void setWriterEmail(String writerEmail) {
+        this.writerEmail = writerEmail;
     }
 
-    public String getUser_email() {
-        return user_email;
+    public String getName() {
+        return name;
     }
 
-    public void setUser_email(String user_email) {
-        this.user_email = user_email;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getWriterUID() {
+        return writerUID;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setWriterUID(String writerUID) {
+        this.writerUID = writerUID;
     }
 
-    public String getUser_UID() {
-        return user_UID;
+    public String getImage() {
+        return image;
     }
 
-    public void setUser_UID(String user_UID) {
-        this.user_UID = user_UID;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return this.getImageName() + this.getTitle();
+        return this.getImage() + this.getTitle();
     }
 }

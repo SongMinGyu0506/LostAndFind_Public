@@ -153,7 +153,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
     }
 
     private void updatePost() {
-        String upTitle, upContents, upLocation, upLostDate, upPostDate, upCategory, upName, upImageName, upWriterUID;
+        String upTitle, upContents, upLocation, upLostDate, upPostDate, upCategory, upName, upImageName, upWriterUID, upWriterEmail;
 
         upTitle = title.getText().toString();
         upContents = contents.getText().toString();
@@ -164,6 +164,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
         upName = lostPostInfo.getName();    //바꾸지 않음
         upImageName = lostPostInfo.getImage();  //일단 default 원래 올렸던 이미지
         upWriterUID = lostPostInfo.getWriterUID();  //바꾸지 않음
+        upWriterEmail = lostPostInfo.getWriterEmail();
 
         //원래 올렸던 이미지 != 새로 올린 이미지
         if (lostPostInfo.getImage() != imageName){
@@ -190,7 +191,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
                         upLocation, upLostDate,
                         upCategory, upPostDate,
                         upName,
-                        upWriterUID, upImageName);
+                        upWriterUID, upImageName, upWriterEmail);
 
         if (title.length() > 0 && contents.length() > 0) {
 

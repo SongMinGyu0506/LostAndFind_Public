@@ -58,11 +58,11 @@ public class MainInspectActivity extends AppCompatActivity {
         post = (Post)intent.getSerializableExtra("post");
 
         title.setText(post.getTitle()); //
-        text.setText(post.getText()); //
+        text.setText(post.getContents()); //
 //        textView6.setText(post.getTime());
-        location.setText(post.getGetting_item_place()); //
-        date.setText(post.getGetting_item_time()); //
-        email.setText(post.getUser_email()); //
+        location.setText(post.getLocation()); //
+        date.setText(post.getLostDate()); //
+        email.setText(post.getWriterEmail()); //
 //        name.setText(post.getUser_name());
 //        textView11.setText(post.getUser_UID());
         mainInspectQuery.getStorageImage(post,image);
@@ -71,7 +71,7 @@ public class MainInspectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainInspectActivity.this, MainChattingActivity.class);
-                intent.putExtra("user_email",post.getUser_email());
+                intent.putExtra("user_email",post.getWriterEmail());
                 startActivity(intent);
             }
         });

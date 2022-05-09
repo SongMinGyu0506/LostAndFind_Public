@@ -26,7 +26,7 @@ public class MainInspectQuery {
 
     public void getStorageImage(Post post, ImageView image) {
         StorageReference ref = FirebaseStorage.getInstance().getReference();
-        ref.child("photo/"+post.getImageName()).getDownloadUrl()
+        ref.child("photo/"+post.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
