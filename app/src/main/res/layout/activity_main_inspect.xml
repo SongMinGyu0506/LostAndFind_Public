@@ -29,6 +29,29 @@
                     android:textColor="#FFFFFF"
                     android:textSize="18dp"
                     android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="삭제"
+                    android:layout_gravity="right"
+                    android:background="@drawable/lost_post_button"
+                    android:layout_marginRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"/>
+
+                <TextView
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수정"
+                    android:layout_gravity="right"
+                    android:background="@drawable/lost_post_button"
+                    android:layout_marginRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"/>
 
             </androidx.appcompat.widget.Toolbar>
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
@@ -33,6 +34,7 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
     private ArrayList<LostPostInfo> arrayList;
     private Context context;
     private FirebaseStorage storage;
+
 
     public Main2Adapter(ArrayList<LostPostInfo> arrayList, Context context){
         this.arrayList = arrayList;

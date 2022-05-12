@@ -81,12 +81,43 @@ public class Home2Fragment extends Fragment {
         adapter = new Main2Adapter(arrayList, getActivity());
         recyclerView.setAdapter(adapter);
 
+        loadSwiper(swipeRefreshLayout);
+
         setSearchEvent(btnSearch2);
         startView();
 
 //        EventChangeListener();
 
         return rootView;
+    }
+
+    private void loadSwiper(SwipeRefreshLayout swipeRefreshLayout) {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                arrayList.clear();
+                adapter.notifyDataSetChanged();
+                db.collection("LostPosts")
+                        .orderBy("lostDate", Query.Direction.DESCENDING)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (DocumentSnapshot document : task.getResult()) {
+                                        LostPostInfo lostPostInfo = document.toObject(LostPostInfo.class);
+                                        lostPostInfo.setId(document.getId());
+                                        arrayList.add(lostPostInfo);
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                swipeRefreshLayout.setRefreshing(false);
+                spSearch2.setSelection(0);
+            }
+        });
+
     }
 
     private void setSearchEvent(Button btnSearch2) {
@@ -96,6 +127,7 @@ public class Home2Fragment extends Fragment {
                 arrayList.clear();
                 adapter.notifyDataSetChanged();
                 searchPosts();
+
             }
         });
     }
