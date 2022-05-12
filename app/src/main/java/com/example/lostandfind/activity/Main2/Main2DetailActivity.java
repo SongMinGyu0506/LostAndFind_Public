@@ -45,6 +45,8 @@ public class Main2DetailActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     LostPostInfo lostPostInfo;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     TextView title, contents, location, lostDate, postDate, category;
     ImageView image;
@@ -60,6 +62,20 @@ public class Main2DetailActivity extends AppCompatActivity {
         initializeView(); //view 초기화
         setActionbar();     //Actionbar 관련 설정
         getIntentData();    //넘어오는 Intent data get
+
+        String temp_email = user.getEmail();
+        String lostPostInfoEmail = lostPostInfo.getWriterEmail();
+        try {
+            if (!lostPostInfoEmail.equals(temp_email)) {
+                update_btn.setEnabled(false);
+                delete_btn.setEnabled(false);
+            }
+        } catch (Exception e) {
+            update_btn.setEnabled(false);
+            delete_btn.setEnabled(false);
+            Log.e(TAG,"Developer Error Log: ",e);
+        }
+
         setStorageImage(lostPostInfo, image);   //image get, imageView set
         setTextView();  //TextView set
 
