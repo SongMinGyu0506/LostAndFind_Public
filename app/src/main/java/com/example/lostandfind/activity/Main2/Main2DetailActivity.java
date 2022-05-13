@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,17 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
-import com.example.lostandfind.activity.login.LoginActivity;
+import com.example.lostandfind.activity.chat.ChatActivity;
+import com.example.lostandfind.chatDB.ChatRooms;
 import com.example.lostandfind.data.LostPostInfo;
-import com.example.lostandfind.data.Post;
 import com.example.lostandfind.data.UserData;
-import com.example.lostandfind.query.main.MainInspectQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,15 +41,19 @@ public class Main2DetailActivity extends AppCompatActivity {
     private final static String TAG = "Main2DetailActivity";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    LostPostInfo lostPostInfo;
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    LostPostInfo lostPostInfo;
+    String myName, myUID;
+    ChatRooms chatRoom;
+    Boolean exist;
+    String chatRoomId;
 
     TextView title, contents, location, lostDate, postDate, category;
     ImageView image;
     Toolbar toolbar;
 
     TextView update_btn, delete_btn;
+    Button chat_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,14 @@ public class Main2DetailActivity extends AppCompatActivity {
         initializeView(); //view 초기화
         setActionbar();     //Actionbar 관련 설정
         getIntentData();    //넘어오는 Intent data get
+        setStorageImage(lostPostInfo, image);   //image get, imageView set
+        setTextView();  //TextView set
+
+        getUserData();
+        getRoomId();
+        update_btn.setOnClickListener(onClickListener);
+        delete_btn.setOnClickListener(onClickListener);
+        chat_btn.setOnClickListener(onClickListener);
 
         String temp_email = user.getEmail();
         String lostPostInfoEmail = lostPostInfo.getWriterEmail();
@@ -75,12 +84,6 @@ public class Main2DetailActivity extends AppCompatActivity {
             delete_btn.setEnabled(false);
             Log.e(TAG,"Developer Error Log: ",e);
         }
-
-        setStorageImage(lostPostInfo, image);   //image get, imageView set
-        setTextView();  //TextView set
-
-        update_btn.setOnClickListener(onClickListener);
-        delete_btn.setOnClickListener(onClickListener);
     }
 
     //버튼 리스너
@@ -94,9 +97,82 @@ public class Main2DetailActivity extends AppCompatActivity {
                 case R.id.delete_btn:
                     deletePostAlert();
                     break;
+                case R.id.chat_btn:
+                    enterChat();
+                    break;
             }
         }
     };
+
+    private void getRoomId(){
+        if (lostPostInfo.getWriterUID().equals(user.getUid()) == false) {    //본인이 작성한 글은 채팅걸기를 막음
+            db.collection("ChatRoom").document(user.getUid())
+                    .collection("userRoom")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                    ChatRooms chatRooms = document.toObject(ChatRooms.class); //여기
+                                    chatRooms.setId(document.getId());
+                                    exist = (chatRooms.getReceiverUID()).equals(lostPostInfo.getWriterUID());   //같으면 true 다르면 false
+                                    if (exist) {
+                                        chatRoom = chatRooms;
+                                        chatRoomId = chatRoom.getId();
+                                    }
+
+                                    Log.d(TAG, "aryexist: " + exist);
+                                    Log.d(TAG, "aryid: " + chatRoomId);
+                                    Log.d(TAG, "ary: " + chatRoom.getReceiverName());
+                                    Log.d(TAG, "ary: " + chatRoom.getReceiverUID());
+                                    Log.d(TAG, "arychatroom: " + chatRoom.getSenderName());
+                                }
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void getUserData() {
+        DocumentReference dRef = db.collection("Users").document(user.getUid());
+        dRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            myName = (documentSnapshot.toObject(UserData.class).getName());
+                            myUID = (documentSnapshot.toObject(UserData.class).getUID());
+                            Log.d(TAG, "get sender name: "+myName);
+                            Log.d(TAG, "get sender id: "+myUID);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG,"Developer: Error: ",e);
+                    }
+                });
+    }
+
+    private void enterChat(){
+        if (lostPostInfo.getWriterUID().equals(myUID) == false){    //본인이 작성한 글은 채팅걸기를 막음
+            Intent intent = new Intent(this, ChatActivity.class);
+
+            ChatRooms chatRoomUserData = new ChatRooms(lostPostInfo.getWriterUID(), lostPostInfo.getName(),
+                    myUID, myName);
+            intent.putExtra("chatRoomUserData", chatRoomUserData);
+            intent.putExtra("exist", exist);
+            intent.putExtra("roomId", chatRoomId);
+            startActivity(intent);
+        }
+    }
 
     private void deletePost(){
         db.collection("LostPosts").document(lostPostInfo.getId()).delete()
@@ -152,6 +228,7 @@ public class Main2DetailActivity extends AppCompatActivity {
 
         update_btn = (TextView)findViewById(R.id.update_btn);
         delete_btn = (TextView)findViewById(R.id.delete_btn);
+        chat_btn = (Button)findViewById(R.id.chat_btn);
     }
 
     private void setActionbar(){
@@ -169,6 +246,7 @@ public class Main2DetailActivity extends AppCompatActivity {
         lostDate.setText(lostPostInfo.getLostDate());
         postDate.setText(lostPostInfo.getPostDate());
         category.setText(lostPostInfo.getCategory());
+        toast("uid: "+lostPostInfo.getWriterUID());
     }
 
     private void getIntentData(){
@@ -192,6 +270,7 @@ public class Main2DetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
