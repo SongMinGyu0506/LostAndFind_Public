@@ -1,5 +1,6 @@
 package com.example.lostandfind.activity.Main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -10,11 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.activity.chatting.MainChattingActivity;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.query.main.MainInspectQuery;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 //TODO: [작성자:송민규] 임시로 메인 엑티비티에서 값만 넘긴상태, 추후 UI 및 데이터 가공작업 필수
 //상세내용 액티비티
@@ -22,8 +27,11 @@ public class MainInspectActivity extends AppCompatActivity {
     Intent intent;
     Post post;
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     TextView title, text, textView6, location, date, email, name, textView11;
     Button chatBtn;
+    TextView btnDelete,btnUpdate;
     ImageView image;
     Toolbar toolbar;
 
@@ -52,6 +60,8 @@ public class MainInspectActivity extends AppCompatActivity {
 //        name = (TextView)findViewById(R.id.textView10);
 //        textView11 = (TextView)findViewById(R.id.textView11);
 
+        btnDelete = (TextView) findViewById(R.id.btnDelete);
+        btnUpdate = (TextView) findViewById(R.id.btnUpdate);
         chatBtn = (Button)findViewById(R.id.chatBtn);
 
         intent = getIntent();
@@ -75,6 +85,38 @@ public class MainInspectActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        btnUpdate.setOnClickListener(onClickListener);
+        btnDelete.setOnClickListener(onClickListener);
+    }
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btnUpdate:
+                    updatePost();
+                    break;
+                case R.id.btnDelete:
+                    deletePost();
+                    break;
+            }
+        }
+    };
+
+    private void deletePost() {
+        db.collection("Posts").document(post.getId())
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainInspectActivity.this, "Post deleted", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                });
+    }
+
+    private void updatePost() {
 
     }
 

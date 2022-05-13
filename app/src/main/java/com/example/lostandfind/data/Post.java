@@ -2,12 +2,16 @@ package com.example.lostandfind.data;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class Post implements Serializable {
+    @Exclude private String id;
+
     private String title; //Post 제목
     private String contents; //Post 본문
     private String location;
@@ -39,6 +43,14 @@ public class Post implements Serializable {
         this.writerEmail = writerEmail;
         this.name = name;
         this.writerUID = writerUID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLocation() {

@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -52,56 +54,46 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
     ViewGroup rootView;
-    List<Post> tempL; // 임시
-    Button upper,lower;
+
     RecyclerView recyclerView;
-    ArrayList<Post> postArrayList;
+    ArrayList<Post> postArrayList = new ArrayList<Post>();
     MainAdapter mainAdapter;
-    FirebaseFirestore db;
-    ProgressDialog progressDialog;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     Spinner sp_Search;
     Button btn_Search;
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private int limit = 5;
-    private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
-    private String temp_spSearch;
+    Spinner spinner;
+    FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
-        db = FirebaseFirestore.getInstance();
-        swipeRefreshLayout = rootView.findViewById(R.id.layout_swipe);
-        progressDialog = new ProgressDialog(getActivity());
+        mainAdapter = new MainAdapter(getActivity(), postArrayList);
 
-        btn_Search = (Button)rootView.findViewById(R.id.btn_Search);
-
+        setFindViewById();
+        setRecyclerView();
         setSpinnerData(sp_Search);
 
         CollectionReference collectionReference = db.collection("Posts");
-        Query query = collectionReference.orderBy("title",Query.Direction.ASCENDING).limit(limit);
-        Query query2 = collectionReference.orderBy("getting_item_time",Query.Direction.DESCENDING);
+        Query query = collectionReference.orderBy("postDate",Query.Direction.DESCENDING);
 
-        recyclerView = rootView.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        postArrayList = new ArrayList<Post>();
-        mainAdapter = new MainAdapter(getActivity(), postArrayList);
-        recyclerView.setAdapter(mainAdapter);
-
-        // FloatingActionButton
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.temp_upperBtn);
-
-        //QueryExcuting
-        excuteQuery(query,collectionReference);
+        //Swipe Action
         loadSwiper(swipeRefreshLayout,query,collectionReference);
 
+        //FloatButton
+        fabsetOnClickListener();
 
+        //SearchEvent
+        searchClickEvent(btn_Search,query);
+
+        return rootView;
+    }
+
+    private void fabsetOnClickListener() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,38 +101,33 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
 
-        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isScrolling = true;
-                }
-            }
+    private void setRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(mainAdapter);
+    }
 
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+    private void setFindViewById() {
+        swipeRefreshLayout = rootView.findViewById(R.id.layout_swipe);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        btn_Search = (Button)rootView.findViewById(R.id.btn_Search);
+        spinner = (Spinner)rootView.findViewById(R.id.sp_Search);
+        // FloatingActionButton
+        fab = (FloatingActionButton) rootView.findViewById(R.id.temp_upperBtn);
+    }
 
-                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
-                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                int visibleItemCount = linearLayoutManager.getChildCount();
-                int totalItemCount = linearLayoutManager.getItemCount();
 
-                if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-                    isScrolling = false;
-                    Query nextQuery = collectionReference.orderBy("title", Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit);
-                    nextQueryExcute(nextQuery);
-                }
-            }
-        };
-        recyclerView.addOnScrollListener(onScrollListener);
-        Spinner spinner = (Spinner)rootView.findViewById(R.id.sp_Search);
-        temp_spSearch = spinner.getSelectedItem().toString();
-        searchClickEvent(btn_Search,query2);
-
-        return rootView;
+    @Override
+    public void onResume() {
+        super.onResume();
+        CollectionReference collectionReference = db.collection("Posts");
+        Query query = collectionReference.orderBy("postDate",Query.Direction.ASCENDING);
+        postArrayList.clear();
+        mainAdapter.clear();
+        excuteQuery(query,collectionReference);
+        sp_Search.setSelection(0);
     }
 
     private void searchClickEvent(Button btn_search, Query query) {
@@ -161,7 +148,7 @@ public class HomeFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         if (toString2 == "전체") {
             db.collection("Posts")
-                    .orderBy("getting_item_time",Query.Direction.DESCENDING)
+                    .orderBy("postDate",Query.Direction.DESCENDING)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -169,18 +156,20 @@ public class HomeFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 for (DocumentSnapshot document : task.getResult()) {
                                     Post post = document.toObject(Post.class);
+                                    post.setId(document.getId());
                                     postArrayList.add(post);
                                 }
                             } else {
                                 Log.e(TAG,"Developer Log:", task.getException());
                             }
                             mainAdapter.notifyDataSetChanged();
-                            lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+                            //lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
                         }
                     });
         }else {
             db.collection("Posts")
                     .whereEqualTo("category",toString2)
+                    .orderBy("postDate", Query.Direction.DESCENDING)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -188,14 +177,15 @@ public class HomeFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 for (DocumentSnapshot document : task.getResult()) {
                                     Post post = document.toObject(Post.class);
+                                    post.setId(document.getId());
                                     postArrayList.add(post);
                                 }
                             } else {
                                 Log.e(TAG,"Developer Log:", task.getException());
                             }
                             mainAdapter.notifyDataSetChanged();
-                            if (task.getResult().size() != 0)
-                                lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+//                            if (task.getResult().size() != 0)
+//                                lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -229,26 +219,27 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void nextQueryExcute(Query nextQuery) {
-        nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for (DocumentSnapshot d: task.getResult()) {
-                        Post post = d.toObject(Post.class);
-                        postArrayList.add(post);
-                    }
-                    mainAdapter.notifyDataSetChanged();
-                    if (task.getResult().size() != 0) {
-                        lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
-                    }
-                    if (task.getResult().size() <limit) {
-                        isLastItemReached = true;
-                    }
-                }
-            }
-        });
-    }
+//    private void nextQueryExcute(Query nextQuery) {
+//        nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful()) {
+//                    for (DocumentSnapshot d: task.getResult()) {
+//                        Post post = d.toObject(Post.class);
+//                        post.setId(d.getId());
+//                        postArrayList.add(post);
+//                    }
+//                    mainAdapter.notifyDataSetChanged();
+//                    if (task.getResult().size() != 0) {
+//                        lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+//                    }
+//                    if (task.getResult().size() <limit) {
+//                        isLastItemReached = true;
+//                    }
+//                }
+//            }
+//        });
+//    }
 
     private void loadSwiper(SwipeRefreshLayout swipeRefreshLayout, Query query, CollectionReference collectionReference) {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -270,12 +261,39 @@ public class HomeFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         Post post = document.toObject(Post.class);
+                        post.setId(document.getId());
                         postArrayList.add(post);
                     }
                     mainAdapter.notifyDataSetChanged();
-                    lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
+                    //lastVisible = task.getResult().getDocuments().get(task.getResult().size()-1);
                 }
             }
         });
     }
 }
+//        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+//                    isScrolling = true;
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
+//                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+//                int visibleItemCount = linearLayoutManager.getChildCount();
+//                int totalItemCount = linearLayoutManager.getItemCount();
+//
+//                if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+//                    isScrolling = false;
+//                    Query nextQuery = collectionReference.orderBy("title", Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit);
+//                    nextQueryExcute(nextQuery);
+//                }
+//            }
+//        };
+//        recyclerView.addOnScrollListener(onScrollListener);
