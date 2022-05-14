@@ -16,13 +16,13 @@
             android:name=".activity.chat.ChatActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.Main.MainUpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.Main2.Main2UpdateActivity"
             android:exported="false" />
         <activity
             android:name=".activity.chatting.MainChattingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.Main.Main2InspectActivity"
             android:exported="false" />
         <activity
             android:name=".activity.Main2.Main2DetailActivity"
@@ -52,7 +52,7 @@
             android:name=".activity.my.NoticeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.Main.MainInspectActivity"
+            android:name=".activity.Main.MainDetailActivity"
             android:exported="false" />
         <activity
             android:name=".activity.Main.MainCreateActivity"

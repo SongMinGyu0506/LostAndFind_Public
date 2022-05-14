@@ -95,7 +95,7 @@ public class LostPostActivity extends AppCompatActivity {
                     postRegister();
                     break;
                 case R.id.lostDate_btn:
-                    setCalender();
+                    setCalendar();
                     break;
                 case R.id.select_image:
                     setImage();
@@ -130,7 +130,7 @@ public class LostPostActivity extends AppCompatActivity {
     private String getCurTime(){
         long now = System.currentTimeMillis();
         Date date = new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String getTime = dateFormat.format(date);
 
         return getTime;
@@ -164,7 +164,7 @@ public class LostPostActivity extends AppCompatActivity {
     }
 
     //날짜 선택 관련 설정
-    private void setCalender(){
+    private void setCalendar(){
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog;
 

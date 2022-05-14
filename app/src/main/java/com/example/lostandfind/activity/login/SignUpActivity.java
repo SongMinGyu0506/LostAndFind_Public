@@ -123,7 +123,7 @@ public class SignUpActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(SignUpActivity.this,"비밀번호가 틀렸습니다. 다시 입력해주세요.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this,"비밀번호가 일치하지 않습니다. 다시 입력해주세요.",Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } else {

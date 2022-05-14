@@ -23,21 +23,22 @@ public class Post implements Serializable {
     private String writerUID;
     private String writerEmail;
 
-    private String pattern = "yyyy-MM-dd HH:mm";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+//    private String pattern = "yyyy-MM-dd HH:mm";
+//    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
     public Post() {}
     //Constructor
-    public Post(String imageName, String title, String category, String location, String lostDate, String content, String writerEmail, String name, String writerUID) {
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-        this.postDate = simpleDateFormat.format(new Date()).toString();
+    public Post(String imageName, String title, String category, String location, String lostDate, String postDate, String content, String writerEmail, String name, String writerUID) {
+//        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+//        this.postDate = simpleDateFormat.format(new Date()).toString();
 
         this.image = imageName;
         this.title = title;
         this.category = category;
         this.location = location;
         this.lostDate = lostDate;
+        this.postDate = postDate;
         this.contents = content;
 
         this.writerEmail = writerEmail;
