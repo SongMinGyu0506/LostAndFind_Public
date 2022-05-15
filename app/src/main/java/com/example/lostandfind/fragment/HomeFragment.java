@@ -245,7 +245,7 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(), "testSwipe", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "testSwipe", Toast.LENGTH_SHORT).show();
                 postArrayList.clear();
                 mainAdapter.clear();
                 excuteQuery(query,collectionReference);
