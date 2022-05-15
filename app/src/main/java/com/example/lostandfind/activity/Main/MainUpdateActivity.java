@@ -63,8 +63,8 @@ public class MainUpdateActivity extends AppCompatActivity {
         initializeView(); // view 초기화
         setActionbar();     // Actionbar 관련 설정
         setCategory();  // category 관련 설정
-        //getIntentData();    // 넘어오는 Intent data get
-        //setOriPost();   // 원래 포스트에서 입력됐던 값 set
+        getIntentData();    // 넘어오는 Intent data get
+        setOriPost();   // 원래 포스트에서 입력됐던 값 set
 
         confirm_btn.setOnClickListener(onClickListener);
         lostDate_btn.setOnClickListener(onClickListener);
@@ -231,7 +231,7 @@ public class MainUpdateActivity extends AppCompatActivity {
 
     private void getIntentData(){
         Intent intent = getIntent();
-        post = (Post)intent.getSerializableExtra("post");
+        post = (Post)intent.getSerializableExtra("upDatePost");
     }
 
     //카테고리 관련 설정

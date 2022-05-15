@@ -217,7 +217,7 @@ public class MainDetailActivity extends AppCompatActivity {
     private void updatePost() {
         finish();
         Intent intent = new Intent(this, MainUpdateActivity.class);
-        intent.putExtra("post", post);
+        intent.putExtra("upDatePost", post);
         startActivity(intent);
     }
 
