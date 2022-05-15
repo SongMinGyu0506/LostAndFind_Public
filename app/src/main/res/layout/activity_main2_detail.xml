@@ -23,7 +23,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="상세페이지"
+                    android:text="분실물 상세"
                     android:layout_gravity="center"
                     android:textColor="#FFFFFF"
                     android:textSize="18dp"
@@ -85,6 +85,16 @@
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"/>
 
+    <TextView
+        android:id="@+id/postDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="postDate"
+        android:textSize="10sp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginBottom="7dp"
+        />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -101,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="발견 장소: "
+                android:text="분실 장소: "
                 android:textStyle="bold"/>
 
             <TextView
@@ -122,7 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="발견 날짜: "
+                android:text="분실 날짜: "
                 android:textStyle="bold" />
 
             <TextView
@@ -152,15 +162,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="작성일: "
+                android:text="작성자: "
                 android:textSize="10sp"
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/postDate"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="postDate"
+                android:text="name"
                 android:textSize="10sp"
                 android:layout_marginLeft="3dp"/>
 

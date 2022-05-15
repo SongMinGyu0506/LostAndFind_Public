@@ -37,11 +37,30 @@
         <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/layout/spinner_text.xml" value="0.27239583333333334" />
         <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/menu/menu_activity_main_create.xml" value="0.27239583333333334" />
         <entry key="..\:/Android/Projects/LostAndFound/app/src/main/res/menu/menu_bottom.xml" value="0.2682051282051282" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_lost_post.xml" value="0.17806484295845998" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main2_detail.xml" value="0.33" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main2_inspect.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main2_update.xml" value="0.171875" />
         <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main_create.xml" value="0.33" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main_detail.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main_inspect.xml" value="0.1697061803444782" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/activity_main_update.xml" value="0.17806484295845998" />
         <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/fragment_chat.xml" value="0.1527777777777778" />
         <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/fragment_home.xml" value="0.33" />
-        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/main_recycler_item.xml" value="0.19293478260869565" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/main2_recycler_item.xml" value="0.27853260869565216" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/LostAndFound/app/src/main/res/layout/main_recycler_item.xml" value="0.25" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_find_password.xml" value="0.2545289855072464" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_lost_post.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_main.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_main2_detail.xml" value="0.29257246376811596" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_main2_update.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_main_create.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_main_detail.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/activity_main_update.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/fragment_home.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/fragment_home2.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/main2_recycler_item.xml" value="0.24139492753623187" />
+        <entry key="..\:/Users/myPC/AndroidStudioProjects/detailmodifybefore/app/src/main/res/layout/main_recycler_item.xml" value="0.24139492753623187" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/activity_login.xml" value="0.30483112441214194" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/activity_main.xml" value="0.3605072463768116" />
         <entry key="..\:/Users/song/AndroidStudioProjects/LostAndFind/app/src/main/res/layout/activity_sign_up.xml" value="0.30483112441214194" />

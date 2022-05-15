@@ -1,4 +1,4 @@
-package com.example.lostandfind.activity.Main2;
+package com.example.lostandfind.activity.Main;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -28,7 +28,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.Main2.Main2UpdateActivity;
 import com.example.lostandfind.data.LostPostInfo;
+import com.example.lostandfind.data.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,13 +41,13 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Main2UpdateActivity extends AppCompatActivity {
-    private final static String TAG = "Main2UpdateActivity";
+public class MainUpdateActivity extends AppCompatActivity {
+    private final static String TAG = "MainUpdateActivity";
     private FirebaseStorage storage = FirebaseStorage.getInstance();
-    LostPostInfo lostPostInfo;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    Post post;
 
-    TextView lostDate, confirm_btn;
+    TextView lostDate, postDate, confirm_btn;
     EditText title, contents, location;
     Spinner spinner;
     ImageView lostDate_btn, img, image1;
@@ -56,13 +58,13 @@ public class Main2UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2_update);
+        setContentView(R.layout.activity_main_update);
 
-        initializeView();   // view 초기화
+        initializeView(); // view 초기화
         setActionbar();     // Actionbar 관련 설정
-        setCategory();      // category 관련 설정
-        getIntentData();    // 넘어오는 Intent data get
-        setOriPost();       // 원래 포스트에서 입력됐던 값 set
+        setCategory();  // category 관련 설정
+        //getIntentData();    // 넘어오는 Intent data get
+        //setOriPost();   // 원래 포스트에서 입력됐던 값 set
 
         confirm_btn.setOnClickListener(onClickListener);
         lostDate_btn.setOnClickListener(onClickListener);
@@ -88,12 +90,13 @@ public class Main2UpdateActivity extends AppCompatActivity {
     };
 
     private void setOriPost() {
-        title.setText(lostPostInfo.getTitle());
-        contents.setText(lostPostInfo.getContents());
-        location.setText(lostPostInfo.getLocation());
-        lostDate.setText(lostPostInfo.getLostDate());
+        title.setText(post.getTitle());
+        contents.setText(post.getContents());
+        location.setText(post.getLocation());
+        lostDate.setText(post.getLostDate());
+
         int index;
-        switch(lostPostInfo.getCategory()){
+        switch(post.getCategory()){
             case "가방":
                 index = 0;
                 break;
@@ -136,9 +139,9 @@ public class Main2UpdateActivity extends AppCompatActivity {
         }
         spinner.setSelection(index);
 
-        imageName = lostPostInfo.getImage();
+        imageName = post.getImage();
         StorageReference ref = FirebaseStorage.getInstance().getReference();
-        ref.child("photo/"+lostPostInfo.getImage()).getDownloadUrl()
+        ref.child("photo/"+post.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
@@ -160,14 +163,14 @@ public class Main2UpdateActivity extends AppCompatActivity {
         upLocation = location.getText().toString();
         upLostDate = lostDate.getText().toString();
         upCategory = spinner.getSelectedItem().toString();
-        upPostDate = lostPostInfo.getPostDate();    // 바꾸지 않음
-        upName = lostPostInfo.getName();            //바꾸지 않음
-        upImageName = lostPostInfo.getImage();      //일단 default 원래 올렸던 이미지
-        upWriterUID = lostPostInfo.getWriterUID();  //바꾸지 않음
-        upWriterEmail = lostPostInfo.getWriterEmail();
+        upPostDate = post.getPostDate();    // 바꾸지 않음
+        upName = post.getName();            // 바꾸지 않음
+        upImageName = post.getImage();      // 일단 default 원래 올렸던 이미지
+        upWriterUID = post.getWriterUID();  // 바꾸지 않음
+        upWriterEmail = post.getWriterEmail();
 
         //원래 올렸던 이미지 != 새로 올린 이미지
-        if (lostPostInfo.getImage() != imageName){
+        if (post.getImage() != imageName){
             StorageReference storageRef = storage.getReference();
             StorageReference photoRef = storageRef.child("photo/"+imageName);
             UploadTask uploadTask  = photoRef.putFile(imageUri);
@@ -180,23 +183,18 @@ public class Main2UpdateActivity extends AppCompatActivity {
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(Main2UpdateActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainUpdateActivity.this, "이미지 업로드 성공", Toast.LENGTH_SHORT).show();
                 }
             });
             upImageName = imageName;    //새 이미지 이름
         }
 
-        LostPostInfo upLostPostInfo = new LostPostInfo
-                (upTitle, upContents,
-                        upLocation, upLostDate,
-                        upCategory, upPostDate,
-                        upName,
-                        upWriterUID, upImageName, upWriterEmail);
+        Post upPost = new Post(upImageName, upTitle, upCategory, upLocation, upLostDate, upPostDate, upContents, upWriterEmail, upName, upWriterUID);
 
         if (title.length() > 0 && contents.length() > 0) {
 
-            db.collection("LostPosts").document(lostPostInfo.getId())
-                    .set(upLostPostInfo)
+            db.collection("Posts").document(post.getId())
+                    .set(upPost)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -233,7 +231,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
 
     private void getIntentData(){
         Intent intent = getIntent();
-        lostPostInfo = (LostPostInfo)intent.getSerializableExtra("lostPostInfo");
+        post = (Post)intent.getSerializableExtra("post");
     }
 
     //카테고리 관련 설정

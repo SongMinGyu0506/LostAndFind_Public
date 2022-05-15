@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lostandfind.activity.Main.MainInspectActivity;
+import com.example.lostandfind.activity.Main.MainDetailActivity;
 import com.example.lostandfind.R;
 import com.example.lostandfind.data.Post;
 import com.example.lostandfind.query.main.MainAdapterQuery;
@@ -75,7 +75,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MainInspectActivity.class);
+                Intent intent = new Intent(context, MainDetailActivity.class);
                 intent.putExtra("post",post);
                 context.startActivity(intent);
             }

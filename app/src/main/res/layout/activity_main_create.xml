@@ -19,249 +19,224 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="습득물 등록"
+                android:text="습득물 작성"
                 android:layout_gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18dp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/confirm_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="완료"
+                android:layout_gravity="right"
+                android:background="@drawable/lost_post_button"
+                android:layout_marginRight="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--    텍스트 사이즈 14sp, padding 위아래 20 좌우 15-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <!--        갤러리에서 이미지 선택-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/btn_img"
-                android:layout_width="111dp"
-                android:layout_height="89dp"
-                android:layout_marginRight="15dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                app:srcCompat="@android:drawable/ic_menu_gallery" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@android:color/darker_gray" />
-
-        <!--        글 제목-->
-        <EditText
-            android:id="@+id/c_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:ems="10"
-            android:textSize="14sp"
-            android:hint="글 제목"
-            android:inputType="textPersonName"
-            android:padding="20dp" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@android:color/darker_gray"/>
-
-        <!--        카테고리 선택, 카테고리 아이콘-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/label_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="카테고리" />
-            <Spinner
-                android:id="@+id/c_category"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="40dp"/>
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <!--        &lt;!&ndash;                구분: 습득/분실&ndash;&gt;-->
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal">-->
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/label_type"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:padding="20dp"-->
-        <!--                android:paddingRight="30dp"-->
-        <!--                android:text="구분" />-->
-
-        <!--            <RadioGroup-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                android:orientation="horizontal"-->
-        <!--                android:layout_marginLeft="50dp"-->
-        <!--                android:layout_weight="1" >-->
-
-        <!--                <RadioButton-->
-        <!--                    android:id="@+id/radio_found"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="match_parent"-->
-        <!--                    android:layout_weight="1"-->
-        <!--                    android:checked="true"-->
-        <!--                    android:text="습득" />-->
-
-        <!--                <RadioButton-->
-        <!--                    android:id="@+id/radio_lost"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="match_parent"-->
-        <!--                    android:layout_weight="1"-->
-        <!--                    android:text="분실"/>-->
-
-        <!--            </RadioGroup>-->
-        <!--        </LinearLayout>-->
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@android:color/darker_gray"/>
-
-        <!--        습득/분실 장소 입력-->
-        <EditText
-            android:id="@+id/c_place"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:background="@null"
-            android:padding="20dp"
-            android:textSize="14sp"
-            android:hint="습득/분실 장소 입력" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@android:color/darker_gray"/>
-
-        <!--        날짜, 달력 아이콘-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/label_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:text="날짜" />
-
-            <TextView
-                android:id="@+id/c_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:padding="20dp"
-                android:text="" />
-
-            <ImageView
-                android:id="@+id/btn_calendar"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
-                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@android:color/darker_gray"/>
-
-        <!--        상태: 보관 중/완료. 완료 버튼은 클릭 못함-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/label_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:paddingRight="30dp"
-                android:text="상태" />
-
-            <RadioGroup
-                android:id="@+id/radio_status"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="50dp"
-                android:layout_weight="1" >
-
-                <RadioButton
-                    android:id="@+id/radio_keep"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:onClick="onRadioButtonClicked"
-                    android:text="보관 중" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/lost_post_photo_back">
 
-                <RadioButton
-                    android:id="@+id/radio_complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:onClick="onRadioButtonClicked"
-                    android:text="완료" />
+                    <ImageView
+                        android:id="@+id/select_image"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                        android:layout_margin="10dp"/>
 
-            </RadioGroup>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/kumoh_symbol"
+                    android:background="@drawable/lost_post_photo_back"/>
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/kumoh_symbol"
+                    android:background="@drawable/lost_post_photo_back"/>
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/kumoh_symbol"
+                    android:background="@drawable/lost_post_photo_back"/>
+
+            </LinearLayout>
+
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
             android:background="@android:color/darker_gray"/>
 
-        <!--        상세 내용-->
-        <EditText
-            android:id="@+id/c_details"
+        <!--        글 제목-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:padding="20dp"
-            android:textSize="14sp"
-            android:hint="상세 내용 입력" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="20"
+                android:background="@drawable/lost_post_back"
+                android:hint="제목(필수)"
+                android:padding="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_marginRight="3dp"
+                    android:padding="5dp"
+                    android:background="@drawable/lost_post_back">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="장소: "
+                        android:layout_gravity="center_vertical"/>
+
+                    <EditText
+                        android:id="@+id/location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_horizontal"
+                        android:maxLength="8"
+                        android:maxLines="1"/>
+
+                </LinearLayout>
+
+                <!--        날짜-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="3dp"
+                    android:padding="5dp"
+                    android:background="@drawable/lost_post_back">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="날짜: "
+                        android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/lostDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"/>
+
+                    <ImageView
+                        android:id="@+id/lostDate_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_baseline_calendar_month_24" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--        카테고리-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/lost_post_back"
+                android:layout_marginTop="5dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카테고리"
+                    android:layout_gravity="center_vertical"/>
+
+                <Spinner
+                    android:id="@+id/category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
+
+            <!--        상세 내용-->
+            <EditText
+                android:id="@+id/contents"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="200"
+                android:background="@drawable/lost_post_back"
+                android:layout_marginTop="5dp"
+                android:gravity="left|top"
+                android:hint="내용(필수)"
+                android:padding="10dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="※제목과 내용은 필수 입력 사항입니다!"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
 
     </LinearLayout>
 

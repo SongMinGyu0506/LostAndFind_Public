@@ -1,4 +1,4 @@
-package com.example.lostandfind.activity.Main2;
+package com.example.lostandfind.activity.Main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,10 +19,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
+import com.example.lostandfind.activity.Main2.Main2UpdateActivity;
 import com.example.lostandfind.activity.chat.ChatActivity;
+import com.example.lostandfind.activity.chatting.MainChattingActivity;
 import com.example.lostandfind.chatDB.ChatRooms;
 import com.example.lostandfind.data.LostPostInfo;
+import com.example.lostandfind.data.Post;
 import com.example.lostandfind.data.UserData;
+import com.example.lostandfind.query.main.MainInspectQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,12 +41,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class Main2DetailActivity extends AppCompatActivity {
-    private final static String TAG = "Main2DetailActivity";
+//TODO: [작성자:송민규] 임시로 메인 엑티비티에서 값만 넘긴상태, 추후 UI 및 데이터 가공작업 필수
+//상세내용 액티비티
+public class MainDetailActivity extends AppCompatActivity {
+    private final static String TAG = "MainDetailActivity";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    LostPostInfo lostPostInfo;
+    Post post;
     String myName, myUID;
     ChatRooms chatRoom;
     Boolean exist;
@@ -58,13 +64,13 @@ public class Main2DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2_detail);
+        setContentView(R.layout.activity_main_detail);
 
-        initializeView(); //view 초기화
-        setActionbar();     //Actionbar 관련 설정
-        getIntentData();    //넘어오는 Intent data get
-        setStorageImage(lostPostInfo, image);   //image get, imageView set
-        setTextView();  //TextView set
+        initializeView();               // view 초기화
+        setActionbar();                 // Actionbar 관련 설정
+        getIntentData();                // 넘어오는 Intent data get
+        setStorageImage(post, image);   // image get, imageView set
+        setTextView();                  //TextView set
 
         getUserData();
         getRoomId();
@@ -73,9 +79,9 @@ public class Main2DetailActivity extends AppCompatActivity {
         chat_btn.setOnClickListener(onClickListener);
 
         String temp_email = user.getEmail();
-        String lostPostInfoEmail = lostPostInfo.getWriterEmail();
+        String postEmail = post.getWriterEmail();
         try {
-            if (!lostPostInfoEmail.equals(temp_email)) {
+            if (!postEmail.equals(temp_email)) {
                 update_btn.setEnabled(false);
                 delete_btn.setEnabled(false);
             }
@@ -105,7 +111,7 @@ public class Main2DetailActivity extends AppCompatActivity {
     };
 
     private void getRoomId(){
-        if (lostPostInfo.getWriterUID().equals(user.getUid()) == false) {    //본인이 작성한 글은 채팅걸기를 막음
+        if (post.getWriterUID().equals(user.getUid()) == false) {   // 본인이 작성한 글은 채팅걸기를 막음
             db.collection("ChatRoom").document(user.getUid())
                     .collection("userRoom")
                     .get()
@@ -118,7 +124,7 @@ public class Main2DetailActivity extends AppCompatActivity {
 
                                     ChatRooms chatRooms = document.toObject(ChatRooms.class); //여기
                                     chatRooms.setId(document.getId());
-                                    exist = (chatRooms.getReceiverUID()).equals(lostPostInfo.getWriterUID());   //같으면 true 다르면 false
+                                    exist = (chatRooms.getReceiverUID()).equals(post.getWriterUID());   //같으면 true 다르면 false
                                     if (exist) {
                                         chatRoom = chatRooms;
                                         chatRoomId = chatRoom.getId();
@@ -162,10 +168,10 @@ public class Main2DetailActivity extends AppCompatActivity {
     }
 
     private void enterChat(){
-        if (lostPostInfo.getWriterUID().equals(myUID) == false){    //본인이 작성한 글은 채팅걸기를 막음
+        if (post.getWriterUID().equals(myUID) == false){    // 본인이 작성한 글은 채팅걸기를 막음
             Intent intent = new Intent(this, ChatActivity.class);
 
-            ChatRooms chatRoomUserData = new ChatRooms(lostPostInfo.getWriterUID(), lostPostInfo.getName(),
+            ChatRooms chatRoomUserData = new ChatRooms(post.getWriterUID(), post.getName(),
                     myUID, myName);
             intent.putExtra("chatRoomUserData", chatRoomUserData);
             intent.putExtra("exist", exist);
@@ -175,7 +181,7 @@ public class Main2DetailActivity extends AppCompatActivity {
     }
 
     private void deletePost(){
-        db.collection("LostPosts").document(lostPostInfo.getId()).delete()
+        db.collection("Posts").document(post.getId()).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -210,8 +216,8 @@ public class Main2DetailActivity extends AppCompatActivity {
 
     private void updatePost() {
         finish();
-        Intent intent = new Intent(this, Main2UpdateActivity.class);
-        intent.putExtra("lostPostInfo", lostPostInfo);
+        Intent intent = new Intent(this, MainUpdateActivity.class);
+        intent.putExtra("post", post);
         startActivity(intent);
     }
 
@@ -241,25 +247,25 @@ public class Main2DetailActivity extends AppCompatActivity {
     }
 
     private void setTextView(){
-        title.setText(lostPostInfo.getTitle());
-        contents.setText(lostPostInfo.getContents());
-        location.setText(lostPostInfo.getLocation());
-        lostDate.setText(lostPostInfo.getLostDate());
-        postDate.setText(lostPostInfo.getPostDate());
-        name.setText(lostPostInfo.getName());
-        category.setText(lostPostInfo.getCategory());
-        toast("uid: "+lostPostInfo.getWriterUID());
+        title.setText(post.getTitle());
+        contents.setText(post.getContents());
+        location.setText(post.getLocation());
+        lostDate.setText(post.getLostDate());
+        postDate.setText(post.getPostDate());
+        name.setText(post.getName());
+        category.setText(post.getCategory());
+        toast("uid: "+post.getWriterUID());
     }
 
     private void getIntentData(){
         Intent intent = getIntent();
-        lostPostInfo = (LostPostInfo)intent.getSerializableExtra("lostPostInfo");
+        post = (Post)intent.getSerializableExtra("post");
     }
 
 
-    public void setStorageImage(LostPostInfo lostPostInfo, ImageView image) {
+    public void setStorageImage(Post post, ImageView image) {
         StorageReference ref = FirebaseStorage.getInstance().getReference();
-        ref.child("photo/"+lostPostInfo.getImage()).getDownloadUrl()
+        ref.child("photo/"+post.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {

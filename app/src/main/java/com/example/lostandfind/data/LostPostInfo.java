@@ -7,14 +7,14 @@ import java.io.Serializable;
 public class LostPostInfo implements Serializable {
     @Exclude private String id;
 
-    private String title;   //게시글 제목
+    private String title;       //게시글 제목
     private String contents;    //게시글 내용
     private String location;    //잃어버린 장소
     private String lostDate;    //잃어버린 날짜
     private String category;    //분실한 물건의 종류
     private String postDate;    //게시글 작성 날짜
-    private String name;    //작성자 이름
-    private String image;   //이미지 이름
+    private String name;        //작성자 이름
+    private String image;       //이미지 이름
     private String writerUID;   //작성자 uid
     private String writerEmail; //작성자 Email
 

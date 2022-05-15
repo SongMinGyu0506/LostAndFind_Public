@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실물 수정 페이지"
+                android:text="분실물 수정"
                 android:layout_gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18dp"

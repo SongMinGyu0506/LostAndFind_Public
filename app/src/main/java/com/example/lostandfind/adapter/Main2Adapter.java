@@ -11,22 +11,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.lostandfind.R;
-import com.example.lostandfind.activity.Main.MainInspectActivity;
 import com.example.lostandfind.activity.Main2.Main2DetailActivity;
 import com.example.lostandfind.data.LostPostInfo;
-import com.example.lostandfind.data.Post;
-import com.example.lostandfind.query.main.MainAdapterQuery;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHolder> {
