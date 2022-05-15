@@ -201,6 +201,7 @@ public class Home2Fragment extends Fragment {
 
     private void startView(){
         db.collection("LostPosts")
+                .orderBy("lostDate",Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         CollectionReference collectionReference = db.collection("Posts");
-        Query query = collectionReference.orderBy("postDate",Query.Direction.ASCENDING);
+        Query query = collectionReference.orderBy("postDate",Query.Direction.DESCENDING);
         postArrayList.clear();
         mainAdapter.clear();
         excuteQuery(query,collectionReference);

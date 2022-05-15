@@ -248,7 +248,7 @@ public class Main2DetailActivity extends AppCompatActivity {
         postDate.setText(lostPostInfo.getPostDate());
         name.setText(lostPostInfo.getName());
         category.setText(lostPostInfo.getCategory());
-        toast("uid: "+lostPostInfo.getWriterUID());
+        //toast("uid: "+lostPostInfo.getWriterUID());
     }
 
     private void getIntentData(){

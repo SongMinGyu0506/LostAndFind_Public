@@ -254,7 +254,7 @@ public class MainDetailActivity extends AppCompatActivity {
         postDate.setText(post.getPostDate());
         name.setText(post.getName());
         category.setText(post.getCategory());
-        toast("uid: "+post.getWriterUID());
+        //toast("uid: "+post.getWriterUID());
     }
 
     private void getIntentData(){

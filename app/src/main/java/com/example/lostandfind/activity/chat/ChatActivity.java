@@ -175,7 +175,9 @@ public class ChatActivity extends AppCompatActivity {
                             } else {
                                 List<Chat> chat = value.toObjects(Chat.class);
                                 adapter.setData(chat);
-                                recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
+                                if (adapter.getItemCount() != 0) {
+                                    recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
+                                }
                             }
                         }
                     });

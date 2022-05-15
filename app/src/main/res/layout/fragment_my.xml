@@ -35,7 +35,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="닉네임"/>
+                        android:text="이름"/>
 
                     <TextView
                         android:id="@+id/tvMyName"
@@ -82,7 +82,7 @@
                 android:layout_height="2dp"
                 android:background="@android:color/darker_gray"
                 android:layout_marginTop="20dp"/>
-
+<!--
             <TextView
                 android:id="@+id/notice_btn"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"/>
-
+-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
@@ -133,7 +133,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"/>
-
+<!--
                 <TextView
                     android:id="@+id/setup_alert_btn"
                     android:layout_width="match_parent"
@@ -161,7 +161,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"/>
-
+-->
             </LinearLayout>
 
             <View
@@ -213,7 +213,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"/>
-
+<!--
                 <TextView
                     android:id="@+id/delete_account_btn"
                     android:layout_width="match_parent"
@@ -228,7 +228,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"/>
-
+-->
             </LinearLayout>
 
         </LinearLayout>
