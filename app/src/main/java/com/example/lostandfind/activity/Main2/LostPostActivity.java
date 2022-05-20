@@ -49,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-//[TODO: 이미지 업로드 안하고 게시글 올릴 시 앱 죽는 버그 !!!!!!!!고쳤음!!!!!!!!!]
 public class LostPostActivity extends AppCompatActivity {
     private final static String TAG = "LostPostActivity";
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

@@ -84,6 +84,8 @@ public class Main2DetailActivity extends AppCompatActivity {
             delete_btn.setEnabled(false);
             Log.e(TAG,"Developer Error Log: ",e);
         }
+
+        setBtnVisibility();
     }
 
     //버튼 리스너
@@ -103,6 +105,14 @@ public class Main2DetailActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void setBtnVisibility(){
+        String writerUID = lostPostInfo.getWriterUID();
+        if (writerUID.equals(user.getUid()) == false){
+            update_btn.setVisibility(View.INVISIBLE);
+            delete_btn.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private void getRoomId(){
         if (lostPostInfo.getWriterUID().equals(user.getUid()) == false) {    //본인이 작성한 글은 채팅걸기를 막음
