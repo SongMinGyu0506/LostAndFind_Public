@@ -82,12 +82,12 @@
                 android:layout_height="2dp"
                 android:background="@android:color/darker_gray"
                 android:layout_marginTop="20dp"/>
-<!--
+
             <TextView
                 android:id="@+id/notice_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="공지사항"
+                android:text="내가 작성한 글"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -96,7 +96,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"/>
--->
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"

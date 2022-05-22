@@ -49,7 +49,7 @@
             android:name=".activity.login.FindPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.my.NoticeActivity"
+            android:name=".activity.my.MyPost"
             android:exported="false" />
         <activity
             android:name=".activity.Main.MainDetailActivity"

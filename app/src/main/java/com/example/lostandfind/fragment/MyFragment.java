@@ -17,12 +17,8 @@ import android.widget.Toast;
 
 import com.example.lostandfind.R;
 import com.example.lostandfind.activity.login.LoginActivity;
-import com.example.lostandfind.activity.my.DeleteAccountActivity;
 import com.example.lostandfind.activity.my.ModifyNickActivity;
-import com.example.lostandfind.activity.my.ModifyPwActivity;
-import com.example.lostandfind.activity.my.NoticeActivity;
-import com.example.lostandfind.activity.my.SetupAlertActivity;
-import com.example.lostandfind.activity.my.SetupDisturbActivity;
+import com.example.lostandfind.activity.my.MyPost;
 import com.example.lostandfind.query.myfragment.MyFragementQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -76,14 +72,14 @@ public class MyFragment extends Fragment {
 //        });
         dao.setMyFragmentUserData(tvMyName,tvMyEmail);
         // 공지사항을 누르면, 공지사항에 대한 페이지 실행
-        //notice_btn = rootView.findViewById(R.id.notice_btn);
-//        notice_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), NoticeActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        notice_btn = rootView.findViewById(R.id.notice_btn);
+        notice_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MyPost.class);
+                startActivity(intent);
+            }
+        });
 
         // 닉네임 수정 버튼을 누르면, 닉네임을 수정하는 페이지 실행
         modify_nick_btn = rootView.findViewById(R.id.modify_nick_btn);
