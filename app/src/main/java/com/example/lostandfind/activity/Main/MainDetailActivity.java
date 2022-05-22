@@ -121,7 +121,8 @@ public class MainDetailActivity extends AppCompatActivity {
     }
 
     private void getRoomId(){
-        if (post.getWriterUID().equals(user.getUid()) == false) {   // 본인이 작성한 글은 채팅걸기를 막음
+        if (post.getWriterUID().equals(user.getUid()) == false) {// 본인이 작성한 글은 채팅걸기를 막음
+            db = FirebaseFirestore.getInstance();
             db.collection("ChatRoom").document(user.getUid())
                     .collection("userRoom")
                     .get()
@@ -134,17 +135,18 @@ public class MainDetailActivity extends AppCompatActivity {
 
                                     ChatRooms chatRooms = document.toObject(ChatRooms.class); //여기
                                     chatRooms.setId(document.getId());
+
                                     exist = (chatRooms.getReceiverUID()).equals(post.getWriterUID());   //같으면 true 다르면 false
                                     if (exist) {
                                         chatRoom = chatRooms;
                                         chatRoomId = chatRoom.getId();
-                                    }
 
-                                    Log.d(TAG, "aryexist: " + exist);
-                                    Log.d(TAG, "aryid: " + chatRoomId);
-                                    Log.d(TAG, "ary: " + chatRoom.getReceiverName());
-                                    Log.d(TAG, "ary: " + chatRoom.getReceiverUID());
-                                    Log.d(TAG, "arychatroom: " + chatRoom.getSenderName());
+                                        Log.d(TAG, "aryexist: " + exist);
+                                        Log.d(TAG, "aryid: " + chatRoomId);
+                                        Log.d(TAG, "ary: " + chatRoom.getReceiverName());
+                                        Log.d(TAG, "ary: " + chatRoom.getReceiverUID());
+                                        Log.d(TAG, "arychatroom: " + chatRoom.getSenderName());
+                                    }
                                 }
                             } else {
                                 Log.w(TAG, "Error getting documents.", task.getException());
