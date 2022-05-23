@@ -67,13 +67,13 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/main_inspect_image"
         android:src="@drawable/kumoh_symbol"/>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/darker_gray"
         android:layout_marginTop="10dp"/>
 
+    <!--    제목-->
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -85,16 +85,7 @@
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"/>
 
-    <TextView
-        android:id="@+id/postDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="postDate"
-        android:textSize="10sp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginBottom="7dp"
-        />
-
+    <!--    장소, 날짜-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -111,14 +102,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실 장소: "
+                android:text="분실 장소"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
+                android:layout_marginLeft="7dp"
                 android:text="Location" />
 
         </LinearLayout>
@@ -132,20 +123,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실 날짜: "
+                android:text="분실 날짜"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lostDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
+                android:layout_marginLeft="7dp"
                 android:text="Date" />
 
         </LinearLayout>
 
     </RelativeLayout>
 
+    <!--    작성자, 작성일, 카테고리-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -157,12 +149,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/namelayout"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="작성자: "
+                android:text="작성자"
                 android:textSize="10sp"
                 android:textStyle="bold"/>
 
@@ -172,7 +165,33 @@
                 android:layout_height="wrap_content"
                 android:text="name"
                 android:textSize="10sp"
-                android:layout_marginLeft="3dp"/>
+                android:layout_marginLeft="7dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/namelayout"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:text="|"
+                android:textSize="10sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/postDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="postDate"
+                android:textSize="10sp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginBottom="7dp"
+                />
 
         </LinearLayout>
 
@@ -185,7 +204,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="카테고리: "
+                android:text="카테고리"
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
@@ -193,20 +212,20 @@
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
+                android:layout_marginLeft="7dp"
                 android:text="category"
                 android:textSize="10sp"/>
 
         </LinearLayout>
 
     </RelativeLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/darker_gray"
         android:layout_marginTop="10dp"/>
 
+    <!--    내용-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

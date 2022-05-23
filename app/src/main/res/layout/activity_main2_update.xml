@@ -78,26 +78,9 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
+                    android:layout_marginLeft="15dp"
                     android:src="@drawable/kumoh_symbol"
                     android:background="@drawable/lost_post_photo_back"/>
-                <ImageView
-                    android:id="@+id/image2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/kumoh_symbol"
-                    android:background="@drawable/lost_post_photo_back"/>
-                <ImageView
-                    android:id="@+id/image3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/kumoh_symbol"
-                    android:background="@drawable/lost_post_photo_back"/>
-
             </LinearLayout>
 
         </LinearLayout>

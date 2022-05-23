@@ -46,23 +46,25 @@
 
                 <LinearLayout
                     android:id="@+id/LinearLayout1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_weight="2"
 
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <Spinner
                         android:id="@+id/spMySearchPost1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
 
                     <Spinner
                         android:id="@+id/spMySearchPost2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="30dp"
+                        />
 
                 </LinearLayout>
 
