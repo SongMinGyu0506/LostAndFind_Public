@@ -60,11 +60,11 @@ public class Main2DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2_detail);
 
-        initializeView(); //view 초기화
-        setActionbar();     //Actionbar 관련 설정
-        getIntentData();    //넘어오는 Intent data get
+        initializeView();                       //view 초기화
+        setActionbar();                         //Actionbar 관련 설정
+        getIntentData();                        //넘어오는 Intent data get
         setStorageImage(lostPostInfo, image);   //image get, imageView set
-        setTextView();  //TextView set
+        setTextView();                          //TextView set
 
         getUserData();
         getRoomId();
@@ -76,8 +76,8 @@ public class Main2DetailActivity extends AppCompatActivity {
         String lostPostInfoEmail = lostPostInfo.getWriterEmail();
         try {
             if (!lostPostInfoEmail.equals(temp_email)) {
-                update_btn.setEnabled(false);
-                delete_btn.setEnabled(false);
+                update_btn.setVisibility(View.INVISIBLE);
+                delete_btn.setVisibility(View.INVISIBLE);
             }
         } catch (Exception e) {
             update_btn.setEnabled(false);
@@ -85,7 +85,7 @@ public class Main2DetailActivity extends AppCompatActivity {
             Log.e(TAG,"Developer Error Log: ",e);
         }
 
-        setBtnVisibility();
+        //setBtnVisibility();
     }
 
     //버튼 리스너
@@ -106,13 +106,13 @@ public class Main2DetailActivity extends AppCompatActivity {
         }
     };
 
-    private void setBtnVisibility(){
-        String writerUID = lostPostInfo.getWriterUID();
-        if (writerUID.equals(user.getUid()) == false){
-            update_btn.setVisibility(View.INVISIBLE);
-            delete_btn.setVisibility(View.INVISIBLE);
-        }
-    }
+//    private void setBtnVisibility(){
+//        String writerUID = lostPostInfo.getWriterUID();
+//        if (writerUID.equals(user.getUid()) == false){
+//            update_btn.setVisibility(View.INVISIBLE);
+//            delete_btn.setVisibility(View.INVISIBLE);
+//        }
+//    }
 
     private void getRoomId(){
         if (lostPostInfo.getWriterUID().equals(user.getUid()) == false) {    //본인이 작성한 글은 채팅걸기를 막음

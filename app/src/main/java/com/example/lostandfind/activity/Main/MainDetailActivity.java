@@ -82,8 +82,8 @@ public class MainDetailActivity extends AppCompatActivity {
         String postEmail = post.getWriterEmail();
         try {
             if (!postEmail.equals(temp_email)) {
-                update_btn.setEnabled(false);
-                delete_btn.setEnabled(false);
+                update_btn.setVisibility(View.INVISIBLE);
+                delete_btn.setVisibility(View.INVISIBLE);
             }
         } catch (Exception e) {
             update_btn.setEnabled(false);
@@ -91,7 +91,7 @@ public class MainDetailActivity extends AppCompatActivity {
             Log.e(TAG,"Developer Error Log: ",e);
         }
 
-        setBtnVisibility();
+        //setBtnVisibility();
     }
 
     //버튼 리스너
@@ -112,13 +112,13 @@ public class MainDetailActivity extends AppCompatActivity {
         }
     };
 
-    private void setBtnVisibility(){
-        String writerUID = post.getWriterUID();
-        if (writerUID.equals(user.getUid()) == false){
-            update_btn.setVisibility(View.INVISIBLE);
-            delete_btn.setVisibility(View.INVISIBLE);
-        }
-    }
+//    private void setBtnVisibility(){
+//        String writerUID = post.getWriterUID();
+//        if (writerUID.equals(user.getUid()) == false){
+//            update_btn.setVisibility(View.INVISIBLE);
+//            delete_btn.setVisibility(View.INVISIBLE);
+//        }
+//    }
 
     private void getRoomId(){
         if (post.getWriterUID().equals(user.getUid()) == false) {// 본인이 작성한 글은 채팅걸기를 막음
