@@ -2,6 +2,7 @@ package com.example.lostandfind.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +16,21 @@ import com.example.lostandfind.activity.chat.ChatActivity;
 import com.example.lostandfind.chatDB.ChatRooms;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRoomHolder>{
     private final static String TAG = "roomAdapter";
 
-    private ArrayList<ChatRooms> arrayList;
+    List<ChatRooms> messages;
     private Context context;
 
-    public ChatRoomAdapter(ArrayList<ChatRooms> arrayList, Context context){
-        this.arrayList = arrayList;
-        this.context = context;
-    }
+    String curUserUID;
 
+    public ChatRoomAdapter(String curUserUID, Context context) {
+        this.curUserUID = curUserUID;
+        this.context = context;
+        messages = new ArrayList<>();
+    }
 
     @NonNull
     @Override
@@ -38,9 +42,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
 
     @Override
     public void onBindViewHolder(@NonNull ChatRoomHolder holder, int position) {
-        ChatRooms chatRoom = arrayList.get(position);
-        holder.setItem(chatRoom);
-
+        ChatRooms chatRoom = messages.get(position);
+        holder.setItem(messages.get(position));
+        Log.d(TAG, "chatroomid: "+chatRoom.getId());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,28 +60,35 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return messages.size();
     }
 
-    void addItem(ChatRooms data){
-        arrayList.add(data);
+    public void setData(List<ChatRooms> messages){
+        this.messages = messages;
+        notifyDataSetChanged();
     }
-
-    public void clear() {arrayList.clear();}
 
     public class ChatRoomHolder extends RecyclerView.ViewHolder{
         private TextView roomName;
         private TextView roomContents;
+        private TextView roomLastTime;
 
         public ChatRoomHolder(@NonNull View itemView) {
             super(itemView);
 
             roomName = itemView.findViewById(R.id.roomName);
             roomContents = itemView.findViewById(R.id.roomContents);
+            roomLastTime = itemView.findViewById(R.id.roomLastTime);
         }
+
         public void setItem(ChatRooms item) {
+            roomContents.setText(item.getLastChat());
             roomName.setText(item.getReceiverName());
-            roomContents.setText(item.getReceiverUID());
+            roomLastTime.setText(item.getLastChatTime());
+
+            Log.d(TAG, "item last chat: "+item.getLastChat());
+            Log.d(TAG, "item last chat time: "+item.getLastChatTime());
+            Log.d(TAG, "item receiver name: "+item.getReceiverName());
         }
     }
 }

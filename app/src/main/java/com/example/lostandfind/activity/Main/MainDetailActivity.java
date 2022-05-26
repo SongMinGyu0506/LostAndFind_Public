@@ -41,8 +41,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-//TODO: [작성자:송민규] 임시로 메인 엑티비티에서 값만 넘긴상태, 추후 UI 및 데이터 가공작업 필수
-//상세내용 액티비티
 public class MainDetailActivity extends AppCompatActivity {
     private final static String TAG = "MainDetailActivity";
 
@@ -51,8 +49,10 @@ public class MainDetailActivity extends AppCompatActivity {
     Post post;
     String myName, myUID;
     ChatRooms chatRoom;
-    Boolean exist;
+    Boolean exist = false;  //default
     String chatRoomId;
+    String oldRoomId;
+    String newRoomId = db.collection("LostPosts").document().getId();
 
     TextView title, contents, location, lostDate, postDate, name, category;
     ImageView image;
@@ -78,20 +78,20 @@ public class MainDetailActivity extends AppCompatActivity {
         delete_btn.setOnClickListener(onClickListener);
         chat_btn.setOnClickListener(onClickListener);
 
-        String temp_email = user.getEmail();
-        String postEmail = post.getWriterEmail();
-        try {
-            if (!postEmail.equals(temp_email)) {
-                update_btn.setVisibility(View.INVISIBLE);
-                delete_btn.setVisibility(View.INVISIBLE);
-            }
-        } catch (Exception e) {
-            update_btn.setEnabled(false);
-            delete_btn.setEnabled(false);
-            Log.e(TAG,"Developer Error Log: ",e);
-        }
+//        String temp_email = user.getEmail();
+//        String postEmail = post.getWriterEmail();
+//        try {
+//            if (!postEmail.equals(temp_email)) {
+//                update_btn.setVisibility(View.INVISIBLE);
+//                delete_btn.setVisibility(View.INVISIBLE);
+//            }
+//        } catch (Exception e) {
+//            update_btn.setEnabled(false);
+//            delete_btn.setEnabled(false);
+//            Log.e(TAG,"Developer Error Log: ",e);
+//        }
 
-        //setBtnVisibility();
+        setBtnVisibility();
     }
 
     //버튼 리스너
@@ -112,47 +112,48 @@ public class MainDetailActivity extends AppCompatActivity {
         }
     };
 
-//    private void setBtnVisibility(){
-//        String writerUID = post.getWriterUID();
-//        if (writerUID.equals(user.getUid()) == false){
-//            update_btn.setVisibility(View.INVISIBLE);
-//            delete_btn.setVisibility(View.INVISIBLE);
-//        }
-//    }
+    private void setBtnVisibility(){
+        String writerUID = post.getWriterUID();
+        if (writerUID.equals(user.getUid()) == false){
+            update_btn.setVisibility(View.INVISIBLE);
+            delete_btn.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private void getRoomId(){
         if (post.getWriterUID().equals(user.getUid()) == false) {// 본인이 작성한 글은 채팅걸기를 막음
-            db = FirebaseFirestore.getInstance();
-            db.collection("ChatRoom").document(user.getUid())
-                    .collection("userRoom")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
+            Log.d(TAG, "getRoomId method");
+            Log.d(TAG, "getWriterUID: "+post.getWriterUID());
+            Log.d(TAG, "getUserUid: "+user.getUid());
+            Log.d(TAG, "newRoomId: "+newRoomId);
+            if (post.getWriterUID().equals(user.getUid()) == false) {    //본인이 작성한 글은 채팅걸기를 막음
+                db.collection("ChatRoom").document(user.getUid())
+                        .collection("userRoom")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                    ChatRooms chatRooms = document.toObject(ChatRooms.class); //여기
-                                    chatRooms.setId(document.getId());
-
-                                    exist = (chatRooms.getReceiverUID()).equals(post.getWriterUID());   //같으면 true 다르면 false
-                                    if (exist) {
-                                        chatRoom = chatRooms;
-                                        chatRoomId = chatRoom.getId();
-
-                                        Log.d(TAG, "aryexist: " + exist);
-                                        Log.d(TAG, "aryid: " + chatRoomId);
-                                        Log.d(TAG, "ary: " + chatRoom.getReceiverName());
-                                        Log.d(TAG, "ary: " + chatRoom.getReceiverUID());
-                                        Log.d(TAG, "arychatroom: " + chatRoom.getSenderName());
+                                        ChatRooms chatRooms = document.toObject(ChatRooms.class); //여기
+                                        Log.d(TAG, "chatrooms get id: "+chatRooms.getId());
+                                        if ((chatRooms.getReceiverUID()).equals(post.getWriterUID())) {
+                                            exist = true;
+                                            chatRoom = chatRooms;
+                                            oldRoomId = chatRoom.getId();
+                                            Log.d(TAG, "old room id: "+oldRoomId);
+                                            Log.d(TAG, "new room id: "+newRoomId);
+                                            Log.d(TAG, "exist: "+exist);
+                                        }
                                     }
+                                } else {
+                                    Log.w(TAG, "Error getting documents.", task.getException());
                                 }
-                            } else {
-                                Log.w(TAG, "Error getting documents.", task.getException());
                             }
-                        }
-                    });
+                        });
+            }
         }
     }
 
@@ -183,11 +184,19 @@ public class MainDetailActivity extends AppCompatActivity {
         if (post.getWriterUID().equals(myUID) == false){    // 본인이 작성한 글은 채팅걸기를 막음
             Intent intent = new Intent(this, ChatActivity.class);
 
-            ChatRooms chatRoomUserData = new ChatRooms(post.getWriterUID(), post.getName(),
-                    myUID, myName);
-            intent.putExtra("chatRoomUserData", chatRoomUserData);
-            intent.putExtra("exist", exist);
-            intent.putExtra("roomId", chatRoomId);
+            if (exist){
+                ChatRooms chatRoomUserData = new ChatRooms(oldRoomId, post.getWriterUID(), post.getName(),
+                        myUID, myName);
+                intent.putExtra("chatRoomUserData", chatRoomUserData);
+                intent.putExtra("exist", exist);
+                intent.putExtra("roomId", oldRoomId);
+            } else {
+                ChatRooms chatRoomUserData = new ChatRooms(newRoomId, post.getWriterUID(), post.getName(),
+                        myUID, myName);
+                intent.putExtra("chatRoomUserData", chatRoomUserData);
+                intent.putExtra("exist", exist);
+                intent.putExtra("roomId", newRoomId);
+            }
             startActivity(intent);
         }
     }

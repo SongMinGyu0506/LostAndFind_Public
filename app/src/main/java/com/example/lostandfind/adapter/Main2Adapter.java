@@ -1,6 +1,7 @@
 package com.example.lostandfind.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -8,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +21,8 @@ import com.example.lostandfind.activity.Main2.Main2DetailActivity;
 import com.example.lostandfind.data.LostPostInfo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -28,13 +33,12 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
     private ArrayList<LostPostInfo> arrayList;
     private Context context;
     private FirebaseStorage storage;
-
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public Main2Adapter(ArrayList<LostPostInfo> arrayList, Context context){
         this.arrayList = arrayList;
         this.context = context;
         this.storage = FirebaseStorage.getInstance();
-
     }
 
     @NonNull
@@ -62,6 +66,26 @@ public class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.Main2ViewHol
                 context.startActivity(intent);
             }
         });
+
+//        if (lostPostInfo.getWriterUID().equals(user.getUid()) == true){
+//            holder.itemView.setOnLongClickListener(new View.OnLongClickListener(){
+//                @Override
+//                public boolean onLongClick(View view) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                    builder.setTitle("수정/삭제 알림");
+//                    String[] items = {"수정", "삭제", "취소"};
+//                    builder.setItems(items, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            Toast.makeText(context, items[i]+"이(가) 선택되었습니다.", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//                    return true;
+//                }
+//            });
+//        }
     }
 
     //전체 데이터 수 반환

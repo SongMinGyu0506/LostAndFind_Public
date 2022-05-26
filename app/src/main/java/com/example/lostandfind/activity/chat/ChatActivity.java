@@ -1,6 +1,5 @@
 package com.example.lostandfind.activity.chat;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,14 +24,11 @@ import com.example.lostandfind.R;
 import com.example.lostandfind.adapter.ChatAdapter;
 import com.example.lostandfind.chatDB.Chat;
 import com.example.lostandfind.chatDB.ChatRooms;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -53,10 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     String text;
     EditText message_et;
     String curTime;
-    String newRoomId = db.collection("Chat").document().getId();
-    String oldRoomId;
-    String tempRoom = "tempRoom";
-    ChatRooms chatRoomData;
+    String roomId;
     Boolean exist;
 
     FrameLayout layout_send;
@@ -109,33 +102,27 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void addChatRoom(){
-        Log.d(TAG, "roomId: "+ newRoomId);
-
-        ChatRooms myInfo = new ChatRooms(senderUID, senderName, receiverUID, receiverName);
-        Log.d(TAG, "mine name: "+senderName);
-        Log.d(TAG, "mine uid: "+senderUID);
-
-        ChatRooms yourInfo = new ChatRooms(receiverUID, receiverName, senderUID, senderName);
-        Log.d(TAG, "yours: "+ receiverUID);
-        Log.d(TAG, "yours: "+ receiverName);
-
-//        db.collection("ChatRoom").document(senderUID)
-//                .collection("userRoom").document(tempRoom).set(yourInfo);
-//
-//        db.collection("ChatRoom").document(receiverUID)
-//                .collection("userRoom").document(tempRoom).set(myInfo);
-
-
         if (exist == false){
+            ChatRooms myInfo = new ChatRooms(roomId, senderUID, senderName, receiverUID, receiverName);
+            ChatRooms yourInfo = new ChatRooms(roomId, receiverUID, receiverName, senderUID, senderName);
+
             db.collection("ChatRoom").document(senderUID)
-                .collection("userRoom").document(newRoomId).set(yourInfo);
+                .collection("userRoom").document(roomId).set(yourInfo);
 
             db.collection("ChatRoom").document(receiverUID)
-                .collection("userRoom").document(newRoomId).set(myInfo);
+                .collection("userRoom").document(roomId).set(myInfo);
         }
-
     }
 
+    //현재 시각
+    private void getCurTime() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String getTime = dateFormat.format(date);
+
+        curTime = getTime;
+    }
 
     private void fetchChat(){
         adapter = new ChatAdapter(user.getUid());
@@ -145,26 +132,8 @@ public class ChatActivity extends AppCompatActivity {
         Log.d(TAG, "fetch name: "+senderName);
         Log.d(TAG, "fetch uid: "+senderUID);
 
-        if (exist == false){
             db.collection("Chat")
-                    .document(newRoomId)
-                    .collection("chats")
-                    .orderBy("sendDate")
-                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            if (error != null){
-                                Log.e(TAG, error.getMessage(), error);
-                            } else {
-                                List<Chat> chat = value.toObjects(Chat.class);
-                                adapter.setData(chat);
-                                recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
-                            }
-                        }
-                    });
-        } else {
-            db.collection("Chat")
-                    .document(oldRoomId)
+                    .document(roomId)
                     .collection("chats")
                     .orderBy("sendDate")
                     .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
@@ -181,31 +150,6 @@ public class ChatActivity extends AppCompatActivity {
                             }
                         }
                     });
-        }
-//        db.collection("Chat")
-//                .document(tempRoom)   //roomId가 null이 되었음
-//                .collection("chats")
-//                .orderBy("sendDate")
-//                .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                        if (error != null){
-//                            Log.e(TAG, error.getMessage(), error);
-//                        } else {
-//                            List<Chat> chat = value.toObjects(Chat.class);
-//                            adapter.setData(chat);
-//                        }
-//                    }
-//                });
-    }
-
-    private void getCurTime() {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String getTime = dateFormat.format(date);
-
-        curTime = getTime;
     }
 
     private void sendMessage(){
@@ -213,22 +157,23 @@ public class ChatActivity extends AppCompatActivity {
         if (!text.isEmpty()){
             progressBar.setVisibility(View.INVISIBLE);
             getCurTime();
+            Log.d(TAG, "cur time1: "+curTime);
             Chat chat = new Chat(senderUID, senderName, text, curTime);
             Log.d(TAG, "sendMsg senderUID: "+senderUID);
 
-            if (exist == false){
-                db.collection("Chat").document(newRoomId)
+            db.collection("Chat").document(roomId)
                         .collection("chats").add(chat);
-            } else {
-                db.collection("Chat").document(oldRoomId)
-                        .collection("chats").add(chat);
-            }
-//            db.collection("Chat").document(roomId)
-//                    .collection("chats").add(chat);
-//            db.collection("Chat").document(tempRoom)
-//                    .collection("chats").add(chat);
 
             message_et.setText("");
+
+            //last chat update
+            Log.d(TAG, "cur time2: "+curTime);
+            ChatRooms myInfo = new ChatRooms(roomId, senderUID, senderName, receiverUID, receiverName, text, curTime);
+            ChatRooms yourInfo = new ChatRooms(roomId, receiverUID, receiverName, senderUID, senderName, text, curTime);
+            db.collection("ChatRoom").document(senderUID)
+                    .collection("userRoom").document(roomId).set(yourInfo);
+            db.collection("ChatRoom").document(receiverUID)
+                    .collection("userRoom").document(roomId).set(myInfo);
         }
     }
 
@@ -251,8 +196,8 @@ public class ChatActivity extends AppCompatActivity {
         ChatRooms chatRoomUserData = (ChatRooms)intent.getSerializableExtra("chatRoomUserData");
         exist = intent.getBooleanExtra("exist", false);
         Log.d(TAG, "exist: "+exist);
-        oldRoomId = intent.getStringExtra("roomId");
-        Log.d(TAG, "oldRoomID: "+oldRoomId);
+        roomId = intent.getStringExtra("roomId");
+        Log.d(TAG, "roomID: "+roomId);
 
         receiverUID = chatRoomUserData.getReceiverUID();
         receiverName = chatRoomUserData.getReceiverName();
@@ -262,8 +207,6 @@ public class ChatActivity extends AppCompatActivity {
         Log.d(TAG, "get your id: "+ receiverUID);
         Log.d(TAG, "get my name: "+senderName);
         Log.d(TAG, "get my id: "+senderUID);
-        Log.d(TAG, "get  old: "+oldRoomId);
-        Log.d(TAG, "get  new: "+newRoomId);
     }
 
     @Override
