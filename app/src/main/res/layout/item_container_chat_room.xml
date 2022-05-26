@@ -5,16 +5,32 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/roomName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="title"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/roomName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:text="title"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/roomLastTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="current time"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/roomContents"
@@ -23,7 +39,9 @@
         android:text="contents"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
     <View
         android:layout_width="match_parent"

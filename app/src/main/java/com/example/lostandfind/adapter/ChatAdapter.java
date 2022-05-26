@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
-    private final static String TAG = "adapter";
+    private final static String TAG = "ChatAdapter";
     static int MY_MSG = 1;
     static int OTHER_MSG = 2;
 

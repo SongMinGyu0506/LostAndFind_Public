@@ -45,8 +45,9 @@ public class Main2DetailActivity extends AppCompatActivity {
     LostPostInfo lostPostInfo;
     String myName, myUID;
     ChatRooms chatRoom;
-    Boolean exist;
-    String chatRoomId;
+    Boolean exist = false;  //default
+    String oldRoomId;
+    String newRoomId = db.collection("LostPosts").document().getId();
 
     TextView title, contents, location, lostDate, postDate, name, category;
     ImageView image;
@@ -72,20 +73,7 @@ public class Main2DetailActivity extends AppCompatActivity {
         delete_btn.setOnClickListener(onClickListener);
         chat_btn.setOnClickListener(onClickListener);
 
-        String temp_email = user.getEmail();
-        String lostPostInfoEmail = lostPostInfo.getWriterEmail();
-        try {
-            if (!lostPostInfoEmail.equals(temp_email)) {
-                update_btn.setVisibility(View.INVISIBLE);
-                delete_btn.setVisibility(View.INVISIBLE);
-            }
-        } catch (Exception e) {
-            update_btn.setEnabled(false);
-            delete_btn.setEnabled(false);
-            Log.e(TAG,"Developer Error Log: ",e);
-        }
-
-        //setBtnVisibility();
+        setBtnVisibility();
     }
 
     //버튼 리스너
@@ -106,15 +94,19 @@ public class Main2DetailActivity extends AppCompatActivity {
         }
     };
 
-//    private void setBtnVisibility(){
-//        String writerUID = lostPostInfo.getWriterUID();
-//        if (writerUID.equals(user.getUid()) == false){
-//            update_btn.setVisibility(View.INVISIBLE);
-//            delete_btn.setVisibility(View.INVISIBLE);
-//        }
-//    }
+    private void setBtnVisibility(){
+        String writerUID = lostPostInfo.getWriterUID();
+        if (writerUID.equals(user.getUid()) == false){
+            update_btn.setVisibility(View.INVISIBLE);
+            delete_btn.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private void getRoomId(){
+        Log.d(TAG, "getRoomId method");
+        Log.d(TAG, "getWriterUID: "+lostPostInfo.getWriterUID());
+        Log.d(TAG, "getUserUid: "+user.getUid());
+        Log.d(TAG, "newRoomId: "+newRoomId);
         if (lostPostInfo.getWriterUID().equals(user.getUid()) == false) {    //본인이 작성한 글은 채팅걸기를 막음
             db.collection("ChatRoom").document(user.getUid())
                     .collection("userRoom")
@@ -127,18 +119,12 @@ public class Main2DetailActivity extends AppCompatActivity {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
 
                                     ChatRooms chatRooms = document.toObject(ChatRooms.class); //여기
-                                    chatRooms.setId(document.getId());
-                                    exist = (chatRooms.getReceiverUID()).equals(lostPostInfo.getWriterUID());   //같으면 true 다르면 false
-                                    if (exist) {
+                                    Log.d(TAG, "chatrooms get id: "+chatRooms.getId());
+                                    if ((chatRooms.getReceiverUID()).equals(lostPostInfo.getWriterUID())) {
+                                        exist = true;
                                         chatRoom = chatRooms;
-                                        chatRoomId = chatRoom.getId();
+                                        oldRoomId = chatRoom.getId();
                                     }
-
-                                    Log.d(TAG, "aryexist: " + exist);
-                                    Log.d(TAG, "aryid: " + chatRoomId);
-                                    Log.d(TAG, "ary: " + chatRoom.getReceiverName());
-                                    Log.d(TAG, "ary: " + chatRoom.getReceiverUID());
-                                    Log.d(TAG, "arychatroom: " + chatRoom.getSenderName());
                                 }
                             } else {
                                 Log.w(TAG, "Error getting documents.", task.getException());
@@ -175,11 +161,19 @@ public class Main2DetailActivity extends AppCompatActivity {
         if (lostPostInfo.getWriterUID().equals(myUID) == false){    //본인이 작성한 글은 채팅걸기를 막음
             Intent intent = new Intent(this, ChatActivity.class);
 
-            ChatRooms chatRoomUserData = new ChatRooms(lostPostInfo.getWriterUID(), lostPostInfo.getName(),
-                    myUID, myName);
-            intent.putExtra("chatRoomUserData", chatRoomUserData);
-            intent.putExtra("exist", exist);
-            intent.putExtra("roomId", chatRoomId);
+            if (exist){
+                ChatRooms chatRoomUserData = new ChatRooms(oldRoomId, lostPostInfo.getWriterUID(), lostPostInfo.getName(),
+                        myUID, myName);
+                intent.putExtra("chatRoomUserData", chatRoomUserData);
+                intent.putExtra("exist", exist);
+                intent.putExtra("roomId", oldRoomId);
+            } else {
+                ChatRooms chatRoomUserData = new ChatRooms(newRoomId, lostPostInfo.getWriterUID(), lostPostInfo.getName(),
+                        myUID, myName);
+                intent.putExtra("chatRoomUserData", chatRoomUserData);
+                intent.putExtra("exist", exist);
+                intent.putExtra("roomId", newRoomId);
+            }
             startActivity(intent);
         }
     }

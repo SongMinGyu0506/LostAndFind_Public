@@ -6,20 +6,35 @@ import com.google.firebase.firestore.Exclude;
 import java.io.Serializable;
 
 public class ChatRooms implements Serializable{
-    @Exclude private String id;
+//    @Exclude private String id;
 
+    String id;
     String receiverUID;
     String receiverName;
     String senderUID;
     String senderName;
+    String lastChat;
+    String lastChatTime;
 
     public ChatRooms(){ }
 
-    public ChatRooms(String receiverUID, String receiverName, String senderUID, String senderName){
+    public ChatRooms(String id, String receiverUID, String receiverName, String senderUID, String senderName){
+        this.id = id;
         this.receiverUID = receiverUID;
         this.receiverName = receiverName;
         this.senderUID = senderUID;
         this.senderName = senderName;
+    }
+
+    public ChatRooms(String id, String receiverUID, String receiverName, String senderUID, String senderName,
+                     String lastChat, String lastChatTime){
+        this.id = id;
+        this.receiverUID = receiverUID;
+        this.receiverName = receiverName;
+        this.senderUID = senderUID;
+        this.senderName = senderName;
+        this.lastChat = lastChat;
+        this.lastChatTime = lastChatTime;
     }
 
     public String getSenderUID() {
@@ -53,5 +68,18 @@ public class ChatRooms implements Serializable{
     }
     public void setReceiverUID(String receiverUID) {
         this.receiverUID = receiverUID;
+    }
+
+    public String getLastChat() {
+        return lastChat;
+    }
+    public void setLastChat(String lastChat) {
+        this.lastChat = lastChat;
+    }
+    public String getLastChatTime() {
+        return lastChatTime;
+    }
+    public void setLastChatTime(String lastChatTime) {
+        this.lastChatTime = lastChatTime;
     }
 }

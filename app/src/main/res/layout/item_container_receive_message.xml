@@ -15,7 +15,7 @@
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.75"/>
+        android:maxWidth="280dp"/>
 
     <TextView
         android:id="@+id/textDateTime"
