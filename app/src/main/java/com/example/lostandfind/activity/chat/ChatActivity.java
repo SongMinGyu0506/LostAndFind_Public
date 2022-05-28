@@ -1,5 +1,6 @@
 package com.example.lostandfind.activity.chat;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,8 +25,12 @@ import com.example.lostandfind.R;
 import com.example.lostandfind.adapter.ChatAdapter;
 import com.example.lostandfind.chatDB.Chat;
 import com.example.lostandfind.chatDB.ChatRooms;
+import com.example.lostandfind.fcm.SendNotification;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -34,6 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     private final static String TAG = "ChatActivity";
@@ -43,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
 
     String receiverName;
     String receiverUID;
+    String receiverToken;
     String senderName;
     String senderUID;
 
@@ -88,10 +95,30 @@ public class ChatActivity extends AppCompatActivity {
             switch(view.getId()){
                 case R.id.layout_send:
                     sendMessage();
+                    sendGson();
                     break;
             }
         }
     };
+
+    private void sendGson() {
+        db.collection("Token")
+                .document(receiverUID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Map<String,Object> tempData = document.getData();
+                                receiverToken = tempData.get("token").toString();
+                            }
+                        }
+                    }
+                });
+        SendNotification.sendNotification(receiverToken,senderName,text);
+    }
 
     private void setActionbar(){
         setSupportActionBar(toolbar);

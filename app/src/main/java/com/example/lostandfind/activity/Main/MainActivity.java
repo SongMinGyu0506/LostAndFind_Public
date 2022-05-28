@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     Map<String,Object> tempMap = new HashMap<>();
                     tempMap.put("token",task.getResult());
                     db.collection("Token")
-                            .document(user.getEmail())
+                            .document(user.getUid())
                             .set(tempMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

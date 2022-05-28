@@ -1,5 +1,7 @@
 package com.example.lostandfind.fcm;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.textclassifier.TextLinks;
@@ -37,6 +39,7 @@ public class SendNotification {
                             .build();
                     Response response = client.newCall(request).execute();
                     String finalResponse = response.body().string();
+                    Log.d(TAG,"Success Send");
                 }catch (Exception e){
                     Log.d("error", e+"");
                 }
