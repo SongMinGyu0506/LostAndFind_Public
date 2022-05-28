@@ -39,6 +39,8 @@ public class SendNotification {
                             .build();
                     Response response = client.newCall(request).execute();
                     String finalResponse = response.body().string();
+                    Log.d(TAG, "Send Token: "+regToken);
+                    Log.d(TAG, "Notification: "+dataJson);
                     Log.d(TAG,"Success Send");
                 }catch (Exception e){
                     Log.d("error", e+"");

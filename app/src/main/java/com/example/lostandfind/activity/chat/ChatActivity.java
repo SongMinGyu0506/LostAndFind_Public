@@ -25,6 +25,7 @@ import com.example.lostandfind.R;
 import com.example.lostandfind.adapter.ChatAdapter;
 import com.example.lostandfind.chatDB.Chat;
 import com.example.lostandfind.chatDB.ChatRooms;
+import com.example.lostandfind.data.Token;
 import com.example.lostandfind.fcm.SendNotification;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -103,21 +104,20 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendGson() {
         db.collection("Token")
-                .document(receiverUID)
+                .whereEqualTo("uid",receiverUID)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Map<String,Object> tempData = document.getData();
-                                receiverToken = tempData.get("token").toString();
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                Token tempToken = documentSnapshot.toObject(Token.class);
+                                Log.d(TAG,"ReceiverInnerToken: "+tempToken.getToken());
+                                SendNotification.sendNotification(tempToken.getToken(), senderName,text);
                             }
                         }
                     }
                 });
-        SendNotification.sendNotification(receiverToken,senderName,text);
     }
 
     private void setActionbar(){

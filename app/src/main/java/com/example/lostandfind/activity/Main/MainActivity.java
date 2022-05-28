@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
                     Map<String,Object> tempMap = new HashMap<>();
+                    tempMap.put("uid",user.getUid());
                     tempMap.put("token",task.getResult());
                     db.collection("Token")
                             .document(user.getUid())
