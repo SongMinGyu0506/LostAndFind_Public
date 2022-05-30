@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
     EditText title, contents, location;
     Spinner spinner;
     ImageView lostDate_btn, img, image1;
+    ImageButton delete_image; // 이미지 삭제 버튼
     private Uri imageUri;
     String imageName;
     Toolbar toolbar;
@@ -67,6 +69,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(onClickListener);
         lostDate_btn.setOnClickListener(onClickListener);
         img.setOnClickListener(onClickListener);
+        delete_image.setOnClickListener(onClickListener);
     }
 
     //버튼 리스너
@@ -82,6 +85,9 @@ public class Main2UpdateActivity extends AppCompatActivity {
                     break;
                 case R.id.select_image:
                     setImage();
+                    break;
+                case R.id.delete_image: // 이미지 삭제
+                    delImage();
                     break;
             }
         }
@@ -137,6 +143,11 @@ public class Main2UpdateActivity extends AppCompatActivity {
         spinner.setSelection(index);
 
         imageName = lostPostInfo.getImage();
+        // 이미지 없는 글이면 수정 페이지에서 invisible
+        if (imageName == "") {
+            image1.setVisibility(View.INVISIBLE);
+            delete_image.setVisibility(View.INVISIBLE);
+        }
         StorageReference ref = FirebaseStorage.getInstance().getReference();
         ref.child("photo/"+lostPostInfo.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -167,7 +178,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
         upWriterEmail = lostPostInfo.getWriterEmail();
 
         //원래 올렸던 이미지 != 새로 올린 이미지
-        if (lostPostInfo.getImage() != imageName){
+        if (lostPostInfo.getImage() != imageName && imageName != "") {
             StorageReference storageRef = storage.getReference();
             StorageReference photoRef = storageRef.child("photo/"+imageName);
             UploadTask uploadTask  = photoRef.putFile(imageUri);
@@ -185,6 +196,10 @@ public class Main2UpdateActivity extends AppCompatActivity {
             });
             upImageName = imageName;    //새 이미지 이름
         }
+
+        // 이미지 삭제한 경우
+        if (imageName == "")
+            upImageName = "";
 
         LostPostInfo upLostPostInfo = new LostPostInfo
                 (upTitle, upContents,
@@ -218,6 +233,7 @@ public class Main2UpdateActivity extends AppCompatActivity {
         spinner = (Spinner)findViewById(R.id.category);
         img = (ImageView)findViewById(R.id.select_image);
         image1 = findViewById(R.id.image1);
+        delete_image = findViewById(R.id.delete_image);
 
         confirm_btn = (TextView)findViewById(R.id.confirm_btn);
         lostDate_btn = (ImageView)findViewById(R.id.lostDate_btn);
@@ -283,6 +299,13 @@ public class Main2UpdateActivity extends AppCompatActivity {
         activityResult.launch(intent);
     }
 
+    // 불러온 이미지 삭제
+    private void delImage() {
+        imageName = "";
+        image1.setVisibility(View.INVISIBLE);
+        delete_image.setVisibility(View.INVISIBLE);
+    }
+
     //사진 가져오기
     ActivityResultLauncher<Intent> activityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -293,6 +316,9 @@ public class Main2UpdateActivity extends AppCompatActivity {
                         imageUri = result.getData().getData();      // Uri 추출
                         imageName = imageUri.getLastPathSegment();  // 파일 path에서 파일명만 가져오기
                         image1.setImageURI(imageUri);
+
+                        image1.setVisibility(View.VISIBLE);
+                        delete_image.setVisibility(View.VISIBLE);
                     }
                 }
             }

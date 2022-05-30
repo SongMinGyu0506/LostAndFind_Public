@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -61,6 +62,7 @@ public class LostPostActivity extends AppCompatActivity {
     Spinner spinner;
 
     ImageView lostDate_btn, img, image1;
+    ImageButton delete_image; // 이미지 삭제 버튼
     private Uri imageUri;
     String imageName = "", name;
 
@@ -83,6 +85,7 @@ public class LostPostActivity extends AppCompatActivity {
         toast("image name1: "+imageName);
         // 이미지
         img.setOnClickListener(onClickListener);
+        delete_image.setOnClickListener(onClickListener);
     }
 
     //버튼 리스너
@@ -99,6 +102,9 @@ public class LostPostActivity extends AppCompatActivity {
                 case R.id.select_image:
                     setImage();
                     break;
+                case R.id.delete_image: // 이미지 삭제
+                    delImage();
+                    break;
             }
         }
     };
@@ -114,6 +120,7 @@ public class LostPostActivity extends AppCompatActivity {
 
         img = findViewById(R.id.select_image);
         image1 = findViewById(R.id.image1);
+        delete_image = findViewById(R.id.delete_image);
     }
 
     //actionbar 관련 설정
@@ -141,6 +148,13 @@ public class LostPostActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         activityResult.launch(intent);
+    }
+
+    // 불러온 이미지 삭제
+    private void delImage() {
+        imageName = "";
+        image1.setVisibility(View.INVISIBLE);
+        delete_image.setVisibility(View.INVISIBLE);
     }
 
     //카테고리 관련 설정
@@ -192,7 +206,11 @@ public class LostPostActivity extends AppCompatActivity {
                         imageUri = result.getData().getData();  //Uri 추출
                         imageName = imageUri.getLastPathSegment(); // 파일path에서 파일명만 가져오기
                         image1.setImageURI(imageUri);
-                        toast("image name: "+imageName);
+                        //toast("image name: " + imageName);
+
+                        // 사진 선택하면 이미지 보이게
+                        image1.setVisibility(View.VISIBLE);
+                        delete_image.setVisibility(View.VISIBLE);
                     }
                 }
             }
