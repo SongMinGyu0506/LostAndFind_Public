@@ -98,7 +98,7 @@ public class Home2Fragment extends Fragment {
                 arrayList.clear();
                 adapter.notifyDataSetChanged();
                 db.collection("LostPosts")
-                        .orderBy("lostDate", Query.Direction.DESCENDING)
+                        .orderBy("postDate", Query.Direction.DESCENDING)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -137,7 +137,7 @@ public class Home2Fragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         if (spinnerText == "전체") {
             db.collection("LostPosts")
-                    .orderBy("lostDate",Query.Direction.DESCENDING)
+                    .orderBy("postDate",Query.Direction.DESCENDING)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -156,7 +156,7 @@ public class Home2Fragment extends Fragment {
         } else {
             db = FirebaseFirestore.getInstance();
             db.collection("LostPosts")
-                    .orderBy("lostDate",Query.Direction.DESCENDING)
+                    .orderBy("postDate",Query.Direction.DESCENDING)
                     .whereEqualTo("category",spinnerText)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -201,7 +201,7 @@ public class Home2Fragment extends Fragment {
 
     private void startView(){
         db.collection("LostPosts")
-                .orderBy("lostDate",Query.Direction.DESCENDING)
+                .orderBy("postDate",Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
