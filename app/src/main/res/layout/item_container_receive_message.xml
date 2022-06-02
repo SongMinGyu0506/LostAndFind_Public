@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="exam"
-        android:textColor="@color/black"
+        android:textColor="#BABABA"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="@id/textMessage"
         app:layout_constraintTop_toBottomOf="@id/textMessage"/>

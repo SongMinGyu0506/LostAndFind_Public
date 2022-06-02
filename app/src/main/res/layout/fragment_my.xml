@@ -35,7 +35,8 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="이름"/>
+                        android:text="이름"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvMyName"
@@ -43,7 +44,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:text="닉네임23"/>
+                        android:text="닉네임23"
+                        android:textColor="@color/black"/>
 
                     <Button
                         android:id="@+id/modify_nick_btn"
@@ -65,13 +67,15 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="학교 이메일"/>
+                        android:text="학교 이메일"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvMyEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="xxxxx@kumoh.ac.kr"/>
+                        android:text="xxxxx@kumoh.ac.kr"
+                        android:textColor="@color/black"/>
 
                 </LinearLayout>
 
@@ -88,6 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="내가 작성한 글"
+                android:textColor="@color/black"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -115,6 +120,7 @@
                     android:text="사용자 설정"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
@@ -125,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="비밀번호 변경"
+                    android:textColor="@color/black"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -182,6 +189,7 @@
                     android:text="기타"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
@@ -191,6 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="앱 버전 1.0.0"
+                    android:textColor="@color/black"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -205,6 +214,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="로그아웃"
+                    android:textColor="@color/black"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"

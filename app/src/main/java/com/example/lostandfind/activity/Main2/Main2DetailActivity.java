@@ -55,6 +55,7 @@ public class Main2DetailActivity extends AppCompatActivity {
 
     TextView update_btn, delete_btn;
     Button chat_btn;
+    TextView notice_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,10 @@ public class Main2DetailActivity extends AppCompatActivity {
         if (writerUID.equals(user.getUid()) == false){
             update_btn.setVisibility(View.INVISIBLE);
             delete_btn.setVisibility(View.INVISIBLE);
+            notice_text.setVisibility(View.INVISIBLE);
+        }
+        if (writerUID.equals(user.getUid()) == true){
+            chat_btn.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -234,6 +239,7 @@ public class Main2DetailActivity extends AppCompatActivity {
         update_btn = (TextView)findViewById(R.id.update_btn);
         delete_btn = (TextView)findViewById(R.id.delete_btn);
         chat_btn = (Button)findViewById(R.id.chat_btn);
+        notice_text = (TextView) findViewById(R.id.notice_text);
     }
 
     private void setActionbar(){

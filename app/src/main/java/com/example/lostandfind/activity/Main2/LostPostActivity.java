@@ -82,7 +82,7 @@ public class LostPostActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(onClickListener);
         lostDate_btn.setOnClickListener(onClickListener);
 
-        toast("image name1: "+imageName);
+//        toast("image name1: "+imageName);
         // 이미지
         img.setOnClickListener(onClickListener);
         delete_image.setOnClickListener(onClickListener);

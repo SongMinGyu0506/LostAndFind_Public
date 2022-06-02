@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.Main2.Main2DetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -34,6 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="삭제"
+                    android:textColor="@color/black"
                     android:layout_gravity="right"
                     android:background="@drawable/lost_post_button"
                     android:layout_marginRight="5dp"
@@ -46,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="수정"
+                    android:textColor="@color/black"
                     android:layout_gravity="right"
                     android:background="@drawable/lost_post_button"
                     android:layout_marginRight="5dp"
@@ -64,14 +71,14 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/main_inspect_image"
         android:src="@drawable/kumoh_symbol"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/darker_gray"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="15dp"/>
 
     <!--    제목-->
     <TextView
@@ -83,13 +90,13 @@
         android:textStyle="bold"
         android:padding="7dp"
         android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"/>
+        android:layout_marginRight="7dp"
+        android:textColor="@color/black"/>
 
     <!--    장소, 날짜-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp">
 
@@ -103,14 +110,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="분실 장소"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
-                android:text="Location" />
+                android:text="Location"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -124,14 +133,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="분실 날짜"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/lostDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
-                android:text="Date" />
+                android:text="Date"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -141,15 +152,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
         android:layout_marginTop="5dp">
 
         <LinearLayout
+            android:id="@+id/namelayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/namelayout"
             android:orientation="horizontal">
 
             <TextView
@@ -157,15 +167,17 @@
                 android:layout_height="wrap_content"
                 android:text="작성자"
                 android:textSize="10sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
                 android:text="name"
                 android:textSize="10sp"
-                android:layout_marginLeft="7dp"/>
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -181,7 +193,8 @@
                 android:layout_marginLeft="7dp"
                 android:text="|"
                 android:textSize="10sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/postDate"
@@ -191,7 +204,7 @@
                 android:textSize="10sp"
                 android:layout_marginLeft="7dp"
                 android:layout_marginBottom="7dp"
-                />
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -206,7 +219,8 @@
                 android:layout_height="wrap_content"
                 android:text="카테고리"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/category"
@@ -214,7 +228,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
                 android:text="category"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -226,19 +241,14 @@
         android:layout_marginTop="10dp"/>
 
     <!--    내용-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/chat_btn"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/main_inspect"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/post_datail"
             android:orientation="vertical"
             android:padding="15dp">
 
@@ -246,20 +256,38 @@
                 android:id="@+id/contents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Text" />
+                android:text="Text"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/chat_btn"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
-            android:text="채팅 걸기"/>
+            android:layout_marginBottom="20dp">
+            <Button
+                android:id="@+id/chat_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="채팅 걸기" />
+            <TextView
+                android:id="@+id/notice_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="※본인이 작성한 게시글입니다." />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

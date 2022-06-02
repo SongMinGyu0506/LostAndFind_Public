@@ -20,13 +20,17 @@
             android:layout_weight="1"
             android:text="title"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/roomLastTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="current time"
+            android:textColor="@color/black"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"/>
 
@@ -37,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="contents"
+        android:textColor="@color/black"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
