@@ -60,7 +60,7 @@
         android:id="@+id/layout_send"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/background_chat_input"
+        android:background="@drawable/background_chat_send_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="12dp"
@@ -92,8 +92,8 @@
         android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/black"
+        android:textColorHint="#BABABA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/layout_send"/>
@@ -103,6 +103,6 @@
         android:layout_height="1dp"
         app:layout_constraintBottom_toTopOf="@id/message_et"
         android:layout_marginBottom="12dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="#BABABA"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
