@@ -22,6 +22,18 @@ public class FindPasswordQuery {
         auth = FirebaseAuth.getInstance();
         this.context = context;
     }
+    public void setEmptyEmail() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(context);
+        dlg.setTitle("이메일 에러");
+        dlg.setMessage("이메일을 입력해주시기 바랍니다.");
+        dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d(TAG,"Developer Log: Empty Email");
+            }
+        });
+        dlg.show();
+    }
     public void setPasswordResetEmail(EditText etFindEmail) {
         String temp_email = etFindEmail.getText().toString();
         auth.sendPasswordResetEmail(temp_email).addOnCompleteListener(new OnCompleteListener<Void>() {
