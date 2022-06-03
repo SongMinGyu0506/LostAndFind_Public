@@ -91,6 +91,15 @@ public class Home2Fragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        arrayList.clear();
+        adapter.notifyDataSetChanged();
+        startView();
+        spSearch2.setSelection(0);
+    }
+
     private void loadSwiper(SwipeRefreshLayout swipeRefreshLayout) {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
